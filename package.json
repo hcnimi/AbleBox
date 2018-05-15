@@ -1,0 +1,30 @@
+{
+  "name": "ablebox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbleBox/AbleBox"
+  },
+  "author": "Able Buffalos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbleBox/AbleBox/issues"
+  },
+  "homepage": "https://github.com/AbleBox/AbleBox/blob/master/README.md",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jquery": "^3.3.1",
+    "mysql": "^2.15.0",
+    "react": "^16.3.2",
+    "react-bootstrap": "^0.32.1",
+    "react-router": "^4.2.0",
+    "underscore": "^1.9.0",
+    "webpack": "^4.8.3"
+  }
+}
