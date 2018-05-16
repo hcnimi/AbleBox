@@ -15,7 +15,7 @@ app.use(function(req, res, next) {
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/signin', (req, res) => {
-
+  res.status(201).end();
 });
 
 app.get('*', (req, res) => {
