@@ -1,4 +1,4 @@
-import React from react;
+import React from 'react';
 import File from './File.jsx';
 
 class AllFiles extends React.Component {

@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var db = require('../db/index.js');
+var path = require('path');
 
 var app = express();
 
@@ -15,6 +16,10 @@ app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/signin', (req, res) => {
 
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 
 app.listen(3000, () => {
