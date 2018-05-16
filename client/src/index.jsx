@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
 import Header from './components/Header.jsx';
 import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
@@ -19,16 +19,18 @@ class App extends React.Component {
   render () {
     return (
       <div>
-        <div className="header">
-          <Header/>
-        </div>
-         <Router>
-          <div className="content">
-            <Route exact={true} path="/" component={SignIn}/>
-            <Route path="/signup" component={SignUp}/>
-            <Route path="/home" component={AllFiles}/>
-            <Route path="/login" componenet={SignIn}/>
-          </div>
+        <Router>
+          <React.Fragment>
+            <div className="header">
+              <Header/>
+            </div>
+            <div className="content">
+              <Route exact={true} path="/" component={SignIn}/>
+              <Route path="/signup" component={SignUp}/>
+              <Route path="/home" component={AllFiles}/>
+              <Route path="/login" componenet={SignIn}/>
+            </div>
+          </React.Fragment>
         </Router>
       </div>
     )
