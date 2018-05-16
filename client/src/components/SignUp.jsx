@@ -18,9 +18,9 @@ class SignUp extends React.Component {
 
   handleOnChange(e) {
     e.preventDefault();
-    this.setState{
+    this.setState ({
       [e.target.name]: e.target.value
-    }
+    });
   }
 
   handleSubmit(e) {
@@ -44,26 +44,28 @@ class SignUp extends React.Component {
     })
   }
 
+
   render() {
-  return (
-    <div>
+    return (
       <div>
-        <h4> Sign Up </h4>
+        <div>
+          <h4> Sign Up </h4>
+        </div>
+        <form onSubmit={this.handleSubmit}>
+          <label> Full Name </label>
+          <input type="text" name="fullName" onChange={this.handleOnChange}></input>
+          <label> Email Address </label>
+          <input type="text" name="email" onChange={this.handleOnChange}></input>
+          <label> username </label>
+          <input type="text" name="username" onChange={this.handleOnChange}></input>
+          <label> password </label>
+          <input type="text" name="password" onChange={this.handleOnChange}></input>
+          <label> Birth Year </label>
+          <input type="number" name="birthYear" onChange={this.handleOnChange}></input>
+        </form>
       </div>
-      <form onSubmit={this.handleSubmit}>
-        <label> Full Name </label>
-        <input type="text" name="fullName" onChange={this.handleOnChange}></input>
-        <label> Email Address </label>
-        <input type="text" name="email" onChange={this.handleOnChange}></input>
-        <label> username </label>
-        <input type="text" name="username" onChange={this.handleOnChange}></input>
-        <label> password </label>
-        <input type="text" name="password" onChange={this.handleOnChange}></input>
-        <label> Birth Year </label>
-        <input type="number" name="birthYear" onChange={this.handleOnChange}></input>
-      </form>
-    </div>
-  )
+    )
+  }
 }
 
 export default withRouter(SignUp);

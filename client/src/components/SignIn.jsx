@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -12,16 +12,17 @@ class SignIn extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = event => {
+  handleChange(event) {
     this.setState({
       [event.target.id]: event.target.value
     });
   }
 
-  handleSubmit = event => {
+  handleSubmit(event) {
     event.preventDefault();
     // TODO: route
   }
+
 
   render() {
     return (
