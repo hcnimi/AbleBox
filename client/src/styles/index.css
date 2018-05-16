@@ -1,0 +1,6 @@
+.fileListEntry {
+  margin: 5px;
+  border: solid;
+  background-color: powderblue;
+  cursor: pointer;
+}

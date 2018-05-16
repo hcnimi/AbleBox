@@ -1,18 +1,23 @@
 import React from 'react';
-import File from './File.jsx';
+import FileListEntry from './FileListEntry.jsx';
+import Files from '../data/mockData.js';
+import { withRouter } from 'react-router-dom';
 
 class AllFiles extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      files: Files,
+    }
   }
 
   render () {
     return (
       <div>
-        {props.files.map((file, i) => <File key={i} file={file} onClick={props.onClick} />)}
+        {this.state.files.map((file, i) => <FileListEntry  file = {file} download = {this.props.download} onClick={this.props.onClick} />)}
       </div>
     )
   }
 }
 
-export default AllFiles;
+export default withRouter(AllFiles);
