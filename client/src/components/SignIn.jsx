@@ -24,7 +24,7 @@ class SignIn extends React.Component {
     event.preventDefault();
     var that = this;
     var data = {
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     };
     $.ajax ({
