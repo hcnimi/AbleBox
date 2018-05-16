@@ -13,11 +13,7 @@ app.use(function(req, res, next) {
 
 app.use(express.static(__dirname + '/../client/dist'));
 
-// app.post('', (req, res) => {
-
-// });
-
-app.get('/signin', (req, res) => {
+app.post('/signin', (req, res) => {
 
 });
 
