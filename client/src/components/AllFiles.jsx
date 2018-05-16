@@ -14,7 +14,7 @@ class AllFiles extends React.Component {
   render () {
     return (
       <div>
-        {this.state.files.map((file, i) => <FileListEntry  file = {file} download = {this.props.download} onClick={this.props.onClick} />)}
+        {this.state.files.map((file, i) => <FileListEntry key={i} file={file} download={this.props.download} onClick={this.props.onClick} />)}
       </div>
     )
   }
