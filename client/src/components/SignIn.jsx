@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
+import $ from 'jquery';
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -20,9 +22,24 @@ class SignIn extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // TODO: route
+    var that = this;
+    var data = {
+      email: this.state.email,
+      password: this.state.password
+    };
+    $.ajax ({
+      type: 'POST',
+      url: '/signin',
+      data: JSON.stringify(data),
+      contentType: 'application/json; charset=utf-8',
+    })
+    .done(() => {
+      that.props.history.push('/home');
+    })
+    .fail(() => {
+      console.log('failed to login');
+    });
   }
-
 
   render() {
     return (
@@ -58,4 +75,4 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+export default withRouter(SignIn);
