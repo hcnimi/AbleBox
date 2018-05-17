@@ -11,7 +11,6 @@ const createUser = (user, cb) => {
                 firstname = '${user.firstname}',
                 lastname = '${user.lastname}'
                 ;`
-  console.log('createUser query>>>>' + query);
   db.connection.query(query, function(error, results, fields) {
     if(error) {cb(error, null);}
     if(results) {cb(null, results);}
@@ -23,7 +22,6 @@ const checkUserExists = (user, cb) => {
   var query = `SELECT username FROM users WHERE
               username = '${user.username}'
               ;`
-  console.log('checkUserExists query>>>>' + query);
   db.connection.query(query, function(error, results, fields) {
     if(error) {cb(error, null);}
     if(results) {cb(null, results);}
