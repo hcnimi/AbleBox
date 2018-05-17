@@ -38,10 +38,7 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-  // check if user name exists
-  // if not exists create one and generate session
   db.checkUserExists(req.body, (err, results) => {
-    // console.log('results' + results);    console.log('results.length ' + results.length);
     if(results.length) {
       res.status(500).send({error: 'username already exists!'});
     } else {
