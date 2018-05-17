@@ -8,8 +8,9 @@ class SignUp extends React.Component {
     this.state = {
       username: '',
       password: '',
-      fullName: '',
-      birthYear: '',
+      firstname: '',
+      lastname: '',
+      birthyear: '',
       email: ''
     };
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -18,9 +19,9 @@ class SignUp extends React.Component {
 
   handleOnChange(e) {
     e.preventDefault();
-    this.setState ({
+    this.setState({
       [e.target.name]: e.target.value
-    });
+    })
   }
 
   handleSubmit(e) {
@@ -28,11 +29,16 @@ class SignUp extends React.Component {
     var that = this;
     var data = {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
+      birthyear: this.state.birthyear,
+      email: this.state.email,
+      firstname: this.state.firstname,
+      lastname: this.state.lastname
     };
+
     $.ajax ({
       type: 'POST',
-      url: '/login',
+      url: '/signup',
       data: JSON.stringify(data),
       contentType: 'application/json; charset=utf-8',
       success: function(data, textStatus, jqXHR) {
@@ -41,7 +47,7 @@ class SignUp extends React.Component {
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         alert(errorThrown); // need to decide on what we are doing here with the error
       }
-    })
+    });
   }
 
 
@@ -52,8 +58,10 @@ class SignUp extends React.Component {
           <h4> Sign Up </h4>
         </div>
         <form onSubmit={this.handleSubmit}>
-          <label> Full Name </label>
-          <input type="text" name="fullName" onChange={this.handleOnChange}></input>
+          <label> First Name </label>
+          <input type="text" name="firstname" onChange={this.handleOnChange}></input>
+          <label> Last Name </label>
+          <input type="text" name="lastname" onChange={this.handleOnChange}></input>
           <label> Email Address </label>
           <input type="text" name="email" onChange={this.handleOnChange}></input>
           <label> username </label>
@@ -61,7 +69,8 @@ class SignUp extends React.Component {
           <label> password </label>
           <input type="text" name="password" onChange={this.handleOnChange}></input>
           <label> Birth Year </label>
-          <input type="number" name="birthYear" onChange={this.handleOnChange}></input>
+          <input type="number" name="birthyear" onChange={this.handleOnChange}></input>
+          <button type = "submit"> </button>
         </form>
       </div>
     )
