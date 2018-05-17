@@ -13,8 +13,6 @@ const createUser = (user, cb) => {
                 ;`
   console.log('createUser query>>>>' + query);
   db.connection.query(query, function(error, results, fields) {
-    // console.log('createUser results>>>' + results);
-    // console.log('createUser error>>>' + error);
     if(error) {cb(error, null);}
     if(results) {cb(null, results);}
   });
@@ -27,8 +25,6 @@ const checkUserExists = (user, cb) => {
               ;`
   console.log('checkUserExists query>>>>' + query);
   db.connection.query(query, function(error, results, fields) {
-    // console.log('checkUserExists results>>>' + results);
-    // console.log('checkUserExists error>>>' + error);
     if(error) {cb(error, null);}
     if(results) {cb(null, results);}
   });
