@@ -59,17 +59,17 @@ class SignUp extends React.Component {
         </div>
         <form onSubmit={this.handleSubmit}>
           <label> First Name </label>
-          <input type="text" name = "firstname" onChange={this.handleOnChange}></input>
+          <input type="text" name="firstname" onChange={this.handleOnChange}></input>
           <label> Last Name </label>
-          <input type="text" name = "lastname" onChange={this.handleOnChange}></input>
+          <input type="text" name="lastname" onChange={this.handleOnChange}></input>
           <label> Email Address </label>
-          <input type="text" name = "email" onChange={this.handleOnChange}></input>
+          <input type="text" name="email" onChange={this.handleOnChange}></input>
           <label> username </label>
-          <input type="text" name = "username" onChange={this.handleOnChange}></input>
+          <input type="text" name="username" onChange={this.handleOnChange}></input>
           <label> password </label>
-          <input type="text" name = "password" onChange={this.handleOnChange}></input>
+          <input type="text" name="password" onChange={this.handleOnChange}></input>
           <label> Birth Year </label>
-          <input type="number" name = "birthyear" onChange={this.handleOnChange}></input>
+          <input type="number" name="birthyear" onChange={this.handleOnChange}></input>
           <button type = "submit"> </button>
         </form>
       </div>
