@@ -33,8 +33,8 @@ app.post('/home', checkUser, (req, res) => {
 
 });
 
-app.post('/login', (req, res) => {
-
+app.post('/signin', (req, res) => {
+  res.status(200).end();
 });
 
 app.post('/signup', (req, res) => {
