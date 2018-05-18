@@ -28,7 +28,7 @@ class App extends React.Component {
               <Route exact={true} path="/" component={SignIn}/>
               <Route path="/signup" component={SignUp}/>
               <Route path="/home" component={AllFiles}/>
-              <Route path="/login" componenet={SignIn}/>
+              <Route path="/login" component={SignIn}/>
             </div>
           </React.Fragment>
         </Router>
