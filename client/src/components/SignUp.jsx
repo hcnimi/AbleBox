@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import $ from 'jquery';
-import { Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Alert, Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -11,10 +11,15 @@ class SignUp extends React.Component {
       confirmPassword: '',
       firstname: '',
       lastname: '',
-      email: ''
+      email: '',
+      passwordMatch: false,
+      passwordConfirmationTyped: false,
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.checkPasswordsMatch = this.checkPasswordsMatch.bind(this);
+    this.isPasswordErrorDisplayed = this.isPasswordErrorDisplayed.bind(this);
+    this.isSubmitButtonEnabled = this.isSubmitButtonEnabled.bind(this);
   }
 
   handleOnChange(e) {
@@ -22,6 +27,31 @@ class SignUp extends React.Component {
     this.setState({
       [e.target.name]: e.target.value
     })
+  }
+
+  checkPasswordsMatch(e) {
+    e.preventDefault();
+    this.handleOnChange(e);
+    this.setState({
+      passwordConfirmationTyped: true
+    });
+    if (e.target.value === this.state.password) {
+      this.setState({
+        passwordMatch: true
+      });
+    } else {
+      this.setState({
+        passwordMatch: false
+      });
+    }
+  }
+
+  isSubmitButtonEnabled() {
+    return !(this.state.email.length > 0 && this.state.firstname.length > 0 && this.state.lastname.length > 0 && this.state.password.length > 0 && this.state.passwordMatch);
+  }
+
+  isPasswordErrorDisplayed() {
+    return (this.state.passwordConfirmationTyped && !this.state.passwordMatch && this.state.confirmPassword.length > 0);
   }
 
   handleSubmit(e) {
@@ -33,19 +63,20 @@ class SignUp extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
-    // need to add a check for confirmation password to match the regular password, otherwise show an error
-    $.ajax ({
-      type: 'POST',
-      url: '/signup',
-      data: JSON.stringify(data),
-      contentType: 'application/json; charset=utf-8',
-      success: function(data, textStatus, jqXHR) {
-        that.props.history.push('/home'); // need to decide on the correct path to redirect to
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        alert(errorThrown); // need to decide on what we are doing here with the error
-      }
-    });
+    if (this.state.passwordMatch) {
+      $.ajax ({
+        type: 'POST',
+        url: '/signup',
+        data: JSON.stringify(data),
+        contentType: 'application/json; charset=utf-8',
+        success: function(data, textStatus, jqXHR) {
+          that.props.history.push('/home'); // need to decide on the correct path to redirect to
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          alert(errorThrown); // need to decide on what we are doing here with the error
+        }
+      });
+    }
   }
 
   render() {
@@ -90,13 +121,16 @@ class SignUp extends React.Component {
             <Row>
               <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
                 <FormGroup>
+                  {(this.isPasswordErrorDisplayed()) ? (<Alert color="danger">
+                    Password does not match Confirmation Password!
+                  </Alert>) : null }
                   <Label for="password"> Confirm Password </Label>
-                  <Input type="password" name="confirmPassword" placeholder="confirm password" onChange={this.handleOnChange}></Input>
+                  <Input type="password" name="confirmPassword" placeholder="confirm password" onChange={this.checkPasswordsMatch}></Input>
                 </FormGroup>
               </Col>
             </Row>
             <br/>
-            <Button className="d-block mx-auto btn-outline-primary" type="submit">Sign Up</Button>
+            <Button className="d-block mx-auto btn-outline-primary" disabled={this.isSubmitButtonEnabled()} type="submit">Sign Up</Button>
           </Form>
       </div>
     )
