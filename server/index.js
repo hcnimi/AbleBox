@@ -62,7 +62,7 @@ app.post('/logout', checkUser, (req, res) => {
         next(err);
       } else {
         res.clearCookie('connect.sid');
-        res.redirect('/signin');
+        res.send('successfully logged out');
       }
     });
   }
