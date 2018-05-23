@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from 'reactstrap';
+import { Row, Col, Button, Form, FormGroup, FormControl, Label, Input } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import $ from 'jquery';
 
@@ -43,29 +43,34 @@ class SignIn extends React.Component {
 
   render() {
     return (
-      <div className='login'>
-        <form onSubmit={ this.handleSubmit }>
-          <FormGroup controlId='email' bsSize='large'>
-            <ControlLabel>Email</ControlLabel>
-            <FormControl
-              autoFocus
-              type='email'
-              value={ this.state.email }
-              onChange={ this.handleChange }
-            />
-          </FormGroup>
-          <FormGroup controlId='password' bsSize='large'>
-            <ControlLabel>Password</ControlLabel>
-            <FormControl
-              value={ this.state.password }
-              onChange={ this.handleChange }
-              type='password'
-            />
-          </FormGroup>
-           <Button color="primary" type='submit'>primary</Button>
-        </form>
+      <div color="light">
+        <div>
+        <br/>
+          <h2 color="light" className="text-center font-weight-bold" id="signInTitle"> Sign In </h2>
+        </div>
+        <br/>
+          <Form onSubmit={this.handleSubmit}>
+            <Row>
+              <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
+                <FormGroup>
+                  <Label for="email"> Email Address </Label>
+                  <Input type="text" name="email" placeholder="email address" onChange={this.handleOnChange}></Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
+                <FormGroup>
+                  <Label for="password"> Password </Label>
+                  <Input type="password" name="password" placeholder="password" onChange={this.handleOnChange}></Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <br/>
+            <Button className="d-block mx-auto btn-outline-primary" type="submit">Sign In</Button>
+          </Form>
       </div>
-    );
+    )
   }
 }
 
