@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, Form, FormGroup, FormControl, ControlLabel, Label, Input } from 'reactstrap';
+import { Row, Col, Button, Form, FormGroup, FormControl, Label, Input } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import $ from 'jquery';
 
