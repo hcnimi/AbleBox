@@ -10,7 +10,7 @@ class SignOut extends React.Component {
       <div color="light">
         <div>
         <br/>
-          <h2 color="light" className="text-center font-weight-bold" id="signInTitle">You are successfully logged out!</h2>
+          <h2 color="light" className="text-center font-weight-bold" id="signOutTitle">You are successfully logged out!</h2>
         </div>
         <br/>
       </div>
