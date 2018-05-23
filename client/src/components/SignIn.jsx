@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Button, FormGroup, FormControl, ControlLabel } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 import $ from 'jquery';
 
@@ -62,13 +62,7 @@ class SignIn extends React.Component {
               type='password'
             />
           </FormGroup>
-          <Button
-            block
-            bsSize='large'
-            type='submit'
-          >
-            Login
-          </Button>
+           <Button color="primary" type='submit'>primary</Button>
         </form>
       </div>
     );

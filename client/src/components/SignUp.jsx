@@ -1,16 +1,16 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import $ from 'jquery';
+import { Row, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
       password: '',
+      confirmPassword: '',
       firstname: '',
       lastname: '',
-      birthyear: '',
       email: ''
     };
     this.handleOnChange = this.handleOnChange.bind(this);
@@ -28,14 +28,12 @@ class SignUp extends React.Component {
     e.preventDefault();
     var that = this;
     var data = {
-      username: this.state.username,
-      password: this.state.password,
-      birthyear: this.state.birthyear,
-      email: this.state.email,
       firstname: this.state.firstname,
-      lastname: this.state.lastname
+      lastname: this.state.lastname,
+      email: this.state.email,
+      password: this.state.password
     };
-
+    // need to add a check for confirmation password to match the regular password, otherwise show an error
     $.ajax ({
       type: 'POST',
       url: '/signup',
@@ -50,28 +48,56 @@ class SignUp extends React.Component {
     });
   }
 
-
   render() {
     return (
-      <div>
+      <div color="light">
         <div>
-          <h4> Sign Up </h4>
+        <br/>
+          <h2 color="light" className="text-center font-weight-bold" id="signUpTitle"> Sign Up </h2>
         </div>
-        <form onSubmit={this.handleSubmit}>
-          <label> First Name </label>
-          <input type="text" name="firstname" onChange={this.handleOnChange}></input>
-          <label> Last Name </label>
-          <input type="text" name="lastname" onChange={this.handleOnChange}></input>
-          <label> Email Address </label>
-          <input type="text" name="email" onChange={this.handleOnChange}></input>
-          <label> username </label>
-          <input type="text" name="username" onChange={this.handleOnChange}></input>
-          <label> password </label>
-          <input type="text" name="password" onChange={this.handleOnChange}></input>
-          <label> Birth Year </label>
-          <input type="number" name="birthyear" onChange={this.handleOnChange}></input>
-          <button type = "submit"> </button>
-        </form>
+        <br/>
+          <Form onSubmit={this.handleSubmit}>
+            <Row>
+              <Col xs={{ size: 8, offset: 2 }} sm={{ size: 3, offset: 3 }} md={{ size: 3 }} lg={{ size: 3}}>
+                <FormGroup>
+                    <Label for="firstName"> First Name </Label>
+                    <Input type="text" name="firstname" placeholder="first name" onChange={this.handleOnChange}></Input>
+                </FormGroup>
+              </Col>
+              <Col xs={{ size: 8, offset: 2 }} sm={{ size: 3, offset: 0 }} md={{ size: 3}} lg={{ size: 3}}>
+                <FormGroup>
+                  <Label for="lastName"> Last Name </Label>
+                  <Input type="text" name="lastname" placeholder="last name" onChange={this.handleOnChange}></Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
+                <FormGroup>
+                  <Label for="email"> Email Address </Label>
+                  <Input type="text" name="email" placeholder="email address" onChange={this.handleOnChange}></Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
+                <FormGroup>
+                  <Label for="password"> Password </Label>
+                  <Input type="password" name="password" placeholder="password" onChange={this.handleOnChange}></Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
+                <FormGroup>
+                  <Label for="password"> Confirm Password </Label>
+                  <Input type="password" name="confirmPassword" placeholder="confirm password" onChange={this.handleOnChange}></Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <br/>
+            <Button className="d-block mx-auto btn-outline-primary" type="submit">Sign Up</Button>
+          </Form>
       </div>
     )
   }

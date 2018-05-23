@@ -2,7 +2,7 @@ import React from 'react';
 import FileListEntry from './FileListEntry.jsx';
 import Files from '../data/mockData.js';
 import { withRouter } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button } from 'reactstrap';
 import $ from 'jquery';
 import css from '../styles/AllFiles.css';
 
