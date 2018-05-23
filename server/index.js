@@ -30,7 +30,7 @@ var checkUser = (req, res, next) => {
 };
 
 app.post('/home', checkUser, (req, res) => {
-
+  res.status(200).end();
 });
 
 app.post('/signin', (req, res) => {
@@ -53,7 +53,19 @@ app.post('/signup', (req, res) => {
     })
     }
   });
+});
 
+app.post('/logout', checkUser, (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        next(err);
+      } else {
+        res.clearCookie('connect.sid');
+        res.redirect('/signin');
+      }
+    });
+  }
 });
 
 app.get('*', (req, res) => {
