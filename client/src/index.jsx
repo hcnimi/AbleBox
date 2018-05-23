@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header.jsx';
 import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
+import SignOut from './components/SignOut.jsx';
 import AllFiles from './components/AllFiles.jsx';
 import {
   BrowserRouter as Router,
@@ -30,6 +31,7 @@ class App extends React.Component {
               <Route path="/signup" component={SignUp}/>
               <Route path="/home" component={AllFiles}/>
               <Route path="/login" component={SignIn}/>
+              <Route path="/logout" component={SignOut}/>
             </div>
           </React.Fragment>
         </Router>
