@@ -26,7 +26,7 @@ class App extends React.Component {
             <div className="header">
               <Header/>
             </div>
-            <div className="content">
+            <div className="content container">
               <Route exact={true} path="/" component={SignIn}/>
               <Route path="/signup" component={SignUp}/>
               <Route path="/home" component={AllFiles}/>

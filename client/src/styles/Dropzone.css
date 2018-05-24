@@ -1,0 +1,27 @@
+#dropzone {
+  border: 2px solid white; 
+}
+#dropzone.empty {
+  position: relative;
+  border-style: dotted;
+  border-color: gray;
+  min-height: 300px;
+  color: gray;
+  background-color: rgba(223, 223, 223, 0.1);
+}
+#dropzone.hover {
+  border-color: #5cbafb;
+  background-color: rgba(92, 186, 251, 0.1);
+}
+#dropzone.empty.hover {
+  color: #5cbafb;
+}
+#dropzone .dz-text {
+  font-size: 2.5em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;  
+}

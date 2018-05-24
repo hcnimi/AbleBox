@@ -1,10 +1,11 @@
 import React from 'react';
 import FileListEntry from './FileListEntry.jsx';
 import Files from '../data/mockData.js';
+import Dropzone from './Dropzone.jsx';
 import { withRouter } from 'react-router-dom';
-import { Button } from 'reactstrap';
-import $ from 'jquery';
+import { Row, Col, Button } from 'reactstrap';
 import css from '../styles/AllFiles.css';
+
 
 class AllFiles extends React.Component {
   constructor(props) {
@@ -14,35 +15,35 @@ class AllFiles extends React.Component {
     this.handleFiles = this.handleFiles.bind(this);
 
     this.state = {
-      files: Files,
-    }
+      files: []
+    };
   }
 
   handleClick() {
-    $('#upload').click();
+    document.querySelector('#upload').click();
   }
 
-  handleFiles() {
-    // mock upload
-    const mockFiles = [];
-    for (let i = 0; i < $('#upload')[0].files.length; i++) {
-      mockFiles.push(Files[0]);
-    }
+  handleFiles(files) {
     this.setState({
-      files: this.state.files.concat(mockFiles)
+      files: [...this.state.files].concat(files)
     });
   }
 
   render () {
     return (
       <React.Fragment>
-        <div>
-          {this.state.files.map((file, i) => <FileListEntry key={i} file={file} download={this.props.download} onClick={this.props.onClick} />)}
-        </div>
-        <div>
-          <input type="file" id="upload" multiple onChange={this.handleFiles} />
-          <Button bsStyle="primary" bsSize="large" onClick={this.handleClick}>Upload Files</Button>
-        </div>
+        <Dropzone files={this.state.files} inProgressFiles={this.state.inProgressFiles} handleFiles={this.handleFiles}>
+        {this.state.files.length
+          ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)
+          : null
+        }
+        </Dropzone>
+        <Row className="mt-3">
+          <Col xs="12">
+            <input type="file" id="upload" multiple onChange={e => this.handleFiles([...e.target.files])} />
+            <Button color="primary" size="large" onClick={this.handleClick}>Upload Files</Button>
+          </Col>
+        </Row>
       </React.Fragment>
     )
   }

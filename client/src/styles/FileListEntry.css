@@ -1,0 +1,6 @@
+.file-list-entry {
+  border-top: 1px solid lightgray;
+}
+.file-list-entry:last-child {
+  border-bottom: 1px solid lightgray;
+}

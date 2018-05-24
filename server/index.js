@@ -68,6 +68,10 @@ app.post('/logout', checkUser, (req, res) => {
   }
 });
 
+app.post('/upload', (req, res) => {
+  res.status(200).end();
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
