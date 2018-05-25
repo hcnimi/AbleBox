@@ -105,7 +105,7 @@ class Dropzone extends React.Component {
           >
             {this.props.children
               ? this.props.children
-              : <div class="dz-text">Drop files here to begin upload.</div>
+              : <div className="dz-text">Drop files here to begin upload.</div>
             }
           </div>
         </Col>

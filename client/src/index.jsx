@@ -6,6 +6,15 @@ import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
 import SignOut from './components/SignOut.jsx';
 import AllFiles from './components/AllFiles.jsx';
+import WebFont from 'webfontloader';
+
+WebFont.load({
+  google: {
+    families: ['Roboto', 'Montserrat', 'Open Sans']
+  }
+});
+
+import './styles/global.css';
 import {
   BrowserRouter as Router,
   Route,

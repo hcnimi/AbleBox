@@ -1,0 +1,24 @@
+html * {
+  font-family: 'Open Sans'
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+a, .btn-outline-primary {
+  color: #25a5ff;
+}
+
+.btn-outline-primary {
+  border-color: #25a5ff;
+}
+
+.btn-primary {
+  background-color: #25a5ff;
+  border-color: #25a5ff;
+}
+
+.progress-bar {
+  background-color: #25a5ff;
+}
