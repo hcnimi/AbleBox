@@ -45,6 +45,7 @@
     "image-webpack-loader": "^4.2.0",
     "nodemon": "^1.17.4",
     "style-loader": "^0.21.0",
+    "webfontloader": "^1.6.28",
     "webpack": "^4.8.3",
     "webpack-cli": "^2.1.3"
   }
