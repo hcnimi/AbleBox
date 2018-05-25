@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var db = require('./models/index.js');
 var path = require('path');
 var session = require('express-session');
+var bcrypt = require('bcrypt-nodejs');
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -34,23 +35,54 @@ app.post('/home', checkUser, (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
-  res.status(200).end();
+  let email = req.body.email;
+  let password = req.body.password;
+
+  db.fetchUser(email, (err, result) => {
+    if (err) {
+      res.redirect(500, '/signin');
+    } else if (!result) {
+      res.redirect(401, '/signin');
+    } else {
+      bcrypt.compare(password, result[0].password, (err, match) => {
+        if (!match) {
+          res.redirect('/login');
+        } else {
+          req.session.regenerate(() => {
+            req.session.isAuthenticated = true;
+            res.redirect('/');
+          });
+        }
+      })
+    }
+  });
 });
 
 app.post('/signup', (req, res) => {
-  db.checkUserExists(req.body, (err, results) => {
-    if(results.length) {
-      res.status(500).send({error: 'username already exists!'});
+  let userData = req.body;
+  bcrypt.hash(userData.password, null, null, (err, hash) => {
+    if (err) {
+      res.redirect(500, '/signup');
+    }
+    userData.password = hash;
+  });
+  db.checkUserExists(userData, (err, results) => {
+    if (err) {
+      res.redirect(500, '/signup');
+    }
+    if (results.length) {
+      res.status(500).send('username already exists!');
     } else {
       db.createUser(req.body, (err, results) => {
         if(err) {
-          res.status(500).send({error: 'please fill in all mandotary fields'});
-        };
-        req.session.regenerate(() => {
-        req.session.isAuthenticated = true;
-        res.send('successfully signed up');
+          res.redirect(500, '/signup');
+        } else {
+          req.session.regenerate(() => {
+            req.session.isAuthenticated = true;
+            res.redirect('/home');
+          });
+        }
       });
-    })
     }
   });
 });
@@ -72,7 +104,7 @@ app.post('/upload', (req, res) => {
   res.status(200).end();
 });
 
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 

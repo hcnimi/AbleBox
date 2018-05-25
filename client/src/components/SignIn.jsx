@@ -14,15 +14,15 @@ class SignIn extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange(e) {
+    e.preventDefault();
     this.setState({
-      [event.target.id]: event.target.value
+      [e.target.name]: e.target.value
     });
   }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    var that = this;
+  
+  handleSubmit(e) {
+    e.preventDefault();
     var data = {
       email: this.state.email,
       password: this.state.password
@@ -34,7 +34,7 @@ class SignIn extends React.Component {
       contentType: 'application/json; charset=utf-8',
     })
     .done(() => {
-      that.props.history.push('/home');
+      this.props.history.push('/home');
     })
     .fail(() => {
       console.log('failed to login');
@@ -53,16 +53,16 @@ class SignIn extends React.Component {
             <Row>
               <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
                 <FormGroup>
-                  <Label for="email"> Email Address </Label>
-                  <Input type="text" name="email" placeholder="email address" onChange={this.handleOnChange}></Input>
+                  <Label for="email">Email Address</Label>
+                  <Input type="text" name="email" placeholder="email address" onChange={this.handleChange}></Input>
                 </FormGroup>
               </Col>
             </Row>
             <Row>
               <Col xs={{ size: 8, offset: 2 }} sm={{ size: 6, offset: 3 }} md={{ size: 6}} lg={{ size: 6}}>
                 <FormGroup>
-                  <Label for="password"> Password </Label>
-                  <Input type="password" name="password" placeholder="password" onChange={this.handleOnChange}></Input>
+                  <Label for="password">Password</Label>
+                  <Input type="password" name="password" placeholder="password" onChange={this.handleChange}></Input>
                 </FormGroup>
               </Col>
             </Row>
