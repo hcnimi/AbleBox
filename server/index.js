@@ -5,6 +5,39 @@ var path = require('path');
 var session = require('express-session');
 var bcrypt = require('bcrypt-nodejs');
 var app = express();
+var AWS = require('aws-sdk');
+var config = require('./config');
+
+var multer = require('multer');
+var multerS3 = require('multer-s3');
+const ABLEBOX_BUCKET = 'ablebox';
+const S3_API_VER = '2006-03-01';
+
+
+var app = express();
+
+var s3 = new AWS.S3({
+  accessKeyId: config.keys.accessKeyId,
+  secretAccessKey: config.keys.secretAccessKey,
+  Bucket: ABLEBOX_BUCKET,
+  apiVersion: S3_API_VER
+});
+
+var upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: ABLEBOX_BUCKET,
+    acl: 'private',
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      cb(null, `${req.session.user}/${file.originalname}`);
+    }
+  })
+});
+
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -23,14 +56,14 @@ app.use(session({
 }));
 
 var checkUser = (req, res, next) => {
-  if(session.id && session.isAuthenticated) {
+  if(req.session.id && req.session.isAuthenticated) {
     next();
   } else {
     res.redirect('/login');
   }
 };
 
-app.post('/home', checkUser, (req, res) => {
+app.get('/home', checkUser, (req, res) => {
   res.status(200).end();
 });
 
@@ -50,6 +83,7 @@ app.post('/signin', (req, res) => {
         } else {
           req.session.regenerate(() => {
             req.session.isAuthenticated = true;
+            req.session.user = email;
             res.redirect('/');
           });
         }
@@ -79,6 +113,7 @@ app.post('/signup', (req, res) => {
         } else {
           req.session.regenerate(() => {
             req.session.isAuthenticated = true;
+            req.session.user = userData.email; //TODO: need to change this to id
             res.redirect('/home');
           });
         }
@@ -87,7 +122,7 @@ app.post('/signup', (req, res) => {
   });
 });
 
-app.post('/logout', checkUser, (req, res) => {
+app.get('/logout', (req, res) => {
   if (req.session) {
     req.session.destroy((err) => {
       if (err) {
@@ -100,11 +135,12 @@ app.post('/logout', checkUser, (req, res) => {
   }
 });
 
-app.post('/upload', (req, res) => {
-  res.status(200).end();
+app.post('/upload', upload.single('file'), function(req, res, next) {
+  //TODO: validate user email/userid against the sessionid
+  res.send('Successfully uploaded ' + req.file.length + ' files!')
 });
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 
