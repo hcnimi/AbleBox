@@ -63,3 +63,6 @@ typings/
 # webpack files
 client/dist/*
 !client/dist/index.html
+
+# config files
+server/config.js
