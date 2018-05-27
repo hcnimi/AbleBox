@@ -6,7 +6,7 @@ var session = require('express-session');
 var bcrypt = require('bcrypt-nodejs');
 var app = express();
 var AWS = require('aws-sdk');
-var config = require('./config');
+var config = require('./config.js');
 
 var multer = require('multer');
 var multerS3 = require('multer-s3');
@@ -129,7 +129,7 @@ app.get('/logout', (req, res) => {
         next(err);
       } else {
         res.clearCookie('connect.sid');
-        res.send('successfully logged out');
+        res.redirect('/login');
       }
     });
   }

@@ -24,10 +24,10 @@ const checkUserExists = (user, cb) => {
 
 };
 
-const fetchUser = (username, cb) => {
+const fetchUser = (useremail, cb) => {
   let sql = 'SELECT * FROM users WHERE email = ?';
 
-  db.connection.query(sql, [username], (err, result, fields) => {
+  db.connection.query(sql, useremail, (err, result, fields) => {
     if (err) { cb (err, null) }
     if (result) { cb(null, result) }
   })
