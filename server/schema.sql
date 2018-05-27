@@ -23,7 +23,7 @@ CREATE TABLE files (
   file_ext varchar(200) NOT NULL,
   folder_id integer NOT NULL,
   created_by_user_id integer NOT NULL,
-  created_on DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  created_on timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   s3_objectId varchar(400) NOT NULL,
   acl varchar(100) NOT NULL,
   PRIMARY KEY (id)
@@ -38,7 +38,7 @@ CREATE TABLE folders (
   full_path varchar(1000) NOT NULL,
   acl varchar(100) NOT NULL,
   created_by_user_id integer NOT NULL,
-  created_on DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  created_on timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 
