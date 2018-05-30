@@ -22,7 +22,6 @@ var s3 = new AWS.S3({
   apiVersion: S3_API_VER
 });
 
-
 var deleteObject = function(objectKey) {
   var params = {
     Bucket: ABLEBOX_BUCKET,
