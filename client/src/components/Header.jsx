@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import logo from '../assets/logo-xs.png';
+import logo from '../assets/logo-sm.png';
 import {
   Navbar,
   NavbarBrand,
