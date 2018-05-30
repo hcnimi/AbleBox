@@ -5,6 +5,7 @@ import Dropzone from './Dropzone.jsx';
 import { withRouter } from 'react-router-dom';
 import { Row, Col, Button } from 'reactstrap';
 import css from '../styles/AllFiles.css';
+import Search from './Search.jsx';
 
 
 class AllFiles extends React.Component {
@@ -13,6 +14,7 @@ class AllFiles extends React.Component {
 
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
+    this.searchHandler = this.searchHandler.bind(this);
 
     this.state = {
       files: []
@@ -29,9 +31,13 @@ class AllFiles extends React.Component {
     });
   }
 
+  searchHandler(value) {
+  }
+
   render () {
     return (
       <React.Fragment>
+        <Search searchHandler = {this.searchHandler}/>
         <Dropzone files={this.state.files} inProgressFiles={this.state.inProgressFiles} handleFiles={this.handleFiles}>
         {this.state.files.length
           ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)
