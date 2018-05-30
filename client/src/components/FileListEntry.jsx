@@ -47,7 +47,7 @@ class FileListEntry extends React.Component {
 		    	// handle error
 		    }
 		  };
-
+		  console.log('formData', formData);
 		  req.send(formData);
 		}
 	}
@@ -75,6 +75,14 @@ class FileListEntry extends React.Component {
 	   			</Col>
 	   			<Col sm="auto">
 	   				<span><Share file={this.props.file} share={this.share}/></span>
+	   			</Col>
+          <Col sm="auto">
+            <Button className="btn-sm btn-link shadow-sm" type="download">
+              <img width="30px" background="transparent" src={downloadIcon} alt="Download"/>
+            </Button>
+          </Col>
+	   			<Col sm="auto">
+	   				<Share file={this.props.file}/>
 	   			</Col>
 	   		</Row>
 				{this.state.upload
