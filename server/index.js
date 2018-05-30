@@ -22,6 +22,56 @@ var s3 = new AWS.S3({
   apiVersion: S3_API_VER
 });
 
+
+var deleteObject = function(objectKey) {
+  var params = {
+    Bucket: ABLEBOX_BUCKET,
+    Key: objectKey
+  };
+  s3.deleteObject(params, function(err, data) {
+    if (err) {
+      res.status = 400;
+      res.write('ERROR DELETING OBJECT');
+      res.end();
+    }
+    else {
+      res.status = 200;
+      res.write('OK');
+      res.end();
+    }
+  });
+};
+
+var getObject = function(objectKey) {
+  var params = {
+    Bucket: ABLEBOX_BUCKET,
+    Key: objectKey
+  };
+  s3.getObject(params, function(err, data) {
+    if (err) {
+      res.status = 400;
+      res.write("ERROR GETTING OBJECT");
+      res.end();
+    } else {
+      return data;
+    }
+    //data example:
+    /*
+    data = {
+     AcceptRanges: "bytes",
+     ContentLength: 3191,
+     ContentType: "image/jpeg",
+     ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
+     LastModified: <Date Representation>,
+     Metadata: {
+     },
+     TagCount: 2,
+     VersionId: "null"
+    }
+    */
+  });
+}
+
 var upload = multer({
   storage: multerS3({
     s3: s3,
@@ -135,7 +185,17 @@ app.get('/logout', (req, res) => {
 
 app.post('/upload', upload.single('file'), function(req, res, next) {
   //TODO: validate user email/userid against the sessionid
-  res.send('Successfully uploaded ' + req.file.length + ' files!')
+  db.createFile(req, function(err, result) {
+    if (err) {
+      res.status = 404;
+      res.write('UNABLE TO UPLOAD FILE');
+      res.end();
+    } else {
+      res.status = 200;
+      res.write('Successfully uploaded ' + req.file.length + ' files!');
+      res.end();
+    }
+  });
 });
 
 app.get('*', (req, res) => {

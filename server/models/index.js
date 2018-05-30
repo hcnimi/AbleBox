@@ -11,18 +11,24 @@ const createUser = (user, cb) => {
 
   let query = 'INSERT INTO users SET ?';
 
-  db.connection.query(query, userDetails, function(error, results, fields) {
-    if(error) {cb(error, null);}
-    if(results) {cb(null, results);}
+  db.connection.query(query, userDetails, function(err, result, fields) {
+    if (err) {
+      cb (err, null);
+    } else {
+      cb(null, result);
+    }
   });
 };
 
 const checkUserExists = (email, cb) => {
 
   let query = 'SELECT email FROM users WHERE email = ?';
-  db.connection.query(query, email, function(error, results, fields) {
-    if(error) {cb(error, null);}
-    if(results) {cb(null, results);}
+  db.connection.query(query, email, function(err, result, fields) {
+    if (err) {
+      cb (err, null);
+    } else {
+      cb(null, result);
+    }
   });
 
 };
@@ -31,27 +37,32 @@ const fetchUser = (email, cb) => {
   let query = 'SELECT * FROM users WHERE email = ?';
 
   db.connection.query(query, email, (err, result, fields) => {
-    if (err) { cb (err, null) }
-    if (result) { cb(null, result) }
-  })
+    if (err) {
+      cb (err, null);
+    } else {
+      cb(null, result);
+    }
+  });
 };
 
-const createFile = (file, cb) => {
-
+const createFile = (req, cb) => {
   let fileDetails = {
-    file_name: file.file_name,
-    file_ext: file.file_ext,
-    folder_id: file.folder_id,
-    created_by_user_id: file.created_by_user_id,
-    s3_objectId: file.s3_objectId,
-    acl: file.acl
+    file_name: req.file.originalname,
+    file_ext: req.file.contentType,
+    folder_id: 0, //not sure what this will be yet
+    created_by_user_id: req.session.userId,
+    s3_objectId: req.file.key,
+    acl: req.file.acl,
   };
 
   let query = 'INSERT INTO files SET ?';
 
-  db.connection.query(query, fileDetails, function(error, results, fields) {
-    if(error) {cb(error, null);}
-    if(results) {cb(null, results);}
+  db.connection.query(query, fileDetails, function(err, result, fields) {
+    if (err) {
+      cb (err, null);
+    } else {
+      cb(null, result);
+    }
   });
 };
 
@@ -67,9 +78,12 @@ const createFolder = (folder, cb) => {
 
   let query = 'INSERT INTO folders SET ?';
 
-  db.connection.query(query, folderDetails, function(error, results, fields) {
-    if(error) {cb(error, null);}
-    if(results) {cb(null, results);}
+  db.connection.query(query, folderDetails, function(err, result, fields) {
+    if (err) {
+      cb (err, null);
+    } else {
+      cb(null, result);
+    }
   });
 };
 
@@ -78,3 +92,4 @@ exports.createUser = createUser;
 exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
+
