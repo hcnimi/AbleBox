@@ -13,7 +13,6 @@ var multerS3 = require('multer-s3');
 const ABLEBOX_BUCKET = 'ablebox';
 const S3_API_VER = '2006-03-01';
 
-
 var app = express();
 
 var s3 = new AWS.S3({
@@ -37,7 +36,6 @@ var upload = multer({
     }
   })
 });
-
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -83,7 +81,7 @@ app.post('/signin', (req, res) => {
         } else {
           req.session.regenerate(() => {
             req.session.isAuthenticated = true;
-            req.session.user = email;
+            req.session.user = results.insertId;
             res.redirect('/');
           });
         }
@@ -100,20 +98,20 @@ app.post('/signup', (req, res) => {
     }
     userData.password = hash;
   });
-  db.checkUserExists(userData, (err, results) => {
+  db.checkUserExists(userData.email, (err, results) => {
     if (err) {
       res.redirect(500, '/signup');
     }
     if (results.length) {
       res.status(500).send('username already exists!');
     } else {
-      db.createUser(req.body, (err, results) => {
+      db.createUser(userData, (err, results) => {
         if(err) {
           res.redirect(500, '/signup');
         } else {
           req.session.regenerate(() => {
             req.session.isAuthenticated = true;
-            req.session.user = userData.email; //TODO: need to change this to id
+            req.session.user = results.insertId;
             res.redirect('/home');
           });
         }

@@ -17,20 +17,20 @@ const createUser = (user, cb) => {
   });
 };
 
-const checkUserExists = (user, cb) => {
+const checkUserExists = (email, cb) => {
 
   let query = 'SELECT email FROM users WHERE email = ?';
-  db.connection.query(query, user.email, function(error, results, fields) {
+  db.connection.query(query, email, function(error, results, fields) {
     if(error) {cb(error, null);}
     if(results) {cb(null, results);}
   });
 
 };
 
-const fetchUser = (useremail, cb) => {
+const fetchUser = (email, cb) => {
   let query = 'SELECT * FROM users WHERE email = ?';
 
-  db.connection.query(query, [useremail], (err, result, fields) => {
+  db.connection.query(query, email, (err, result, fields) => {
     if (err) { cb (err, null) }
     if (result) { cb(null, result) }
   })
