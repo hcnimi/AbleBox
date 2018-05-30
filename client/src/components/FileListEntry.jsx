@@ -79,6 +79,14 @@ class FileListEntry extends React.Component {
 	   			<Col xs="1" sm="1" md="1" lg="1">
 	   				<span><Share file={this.props.file} share={this.share}/></span>
 	   			</Col>
+          <Col sm="auto">
+            <Button className="btn-sm btn-link shadow-sm" type="download">
+              <img width="30px" background="transparent" src={downloadIcon} alt="Download"/>
+            </Button>
+          </Col>
+	   			<Col sm="auto">
+	   				<Share file={this.props.file}/>
+	   			</Col>
 	   		</Row>
 				{this.state.upload
 					? <Progress value={this.state.uploadProgress} />
