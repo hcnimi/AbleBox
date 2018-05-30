@@ -131,7 +131,7 @@ app.post('/signin', (req, res) => {
         } else {
           req.session.regenerate(() => {
             req.session.isAuthenticated = true;
-            req.session.user = result.insertId;
+            req.session.user = result[0].id;
             res.redirect('/');
           });
         }
