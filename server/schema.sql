@@ -21,7 +21,7 @@ CREATE TABLE files (
   id integer AUTO_INCREMENT,
   file_name varchar(200) NOT NULL,
   file_ext varchar(200) NOT NULL,
-  folder_id integer NOT NULL,
+  folder_id integer,
   created_by_user_id integer NOT NULL,
   created_on timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   s3_objectId varchar(400) NOT NULL,

@@ -13,7 +13,7 @@ const createUser = (user, cb) => {
 
   db.connection.query(query, userDetails, function(err, result, fields) {
     if (err) {
-      cb (err, null);
+      cb(err, null);
     } else {
       cb(null, result);
     }
@@ -25,7 +25,7 @@ const checkUserExists = (email, cb) => {
   let query = 'SELECT email FROM users WHERE email = ?';
   db.connection.query(query, email, function(err, result, fields) {
     if (err) {
-      cb (err, null);
+      cb(err, null);
     } else {
       cb(null, result);
     }
@@ -38,7 +38,7 @@ const fetchUser = (email, cb) => {
 
   db.connection.query(query, email, (err, result, fields) => {
     if (err) {
-      cb (err, null);
+      cb(err, null);
     } else {
       cb(null, result);
     }
@@ -49,8 +49,8 @@ const createFile = (req, cb) => {
   let fileDetails = {
     file_name: req.file.originalname,
     file_ext: req.file.contentType,
-    folder_id: 0, //not sure what this will be yet
-    created_by_user_id: req.session.userId,
+    folder_id: null, //not sure what this will be yet
+    created_by_user_id: req.session.user,
     s3_objectId: req.file.key,
     acl: req.file.acl,
   };
@@ -59,7 +59,7 @@ const createFile = (req, cb) => {
 
   db.connection.query(query, fileDetails, function(err, result, fields) {
     if (err) {
-      cb (err, null);
+      cb(err, null);
     } else {
       cb(null, result);
     }
@@ -80,7 +80,19 @@ const createFolder = (folder, cb) => {
 
   db.connection.query(query, folderDetails, function(err, result, fields) {
     if (err) {
-      cb (err, null);
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
+const getFiles = (userId, cb) => {
+  let query = 'SELECT id, file_name as name, created_on as lastModified FROM files WHERE created_by_user_id = ?';
+
+  db.connection.query(query, userId, (err, result, fields) => {
+    if (err) {
+      cb(err, null);
     } else {
       cb(null, result);
     }
@@ -92,4 +104,5 @@ exports.createUser = createUser;
 exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
+exports.getFiles = getFiles;
 
