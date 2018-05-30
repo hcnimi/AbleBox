@@ -152,12 +152,13 @@ app.post('/login', (req, res) => {
     } else {
       bcrypt.compare(password, result[0].password, (err, match) => {
         if (!match) {
-          res.status(401).end();
+          console.log('match', match);
+          res.redirect(401, '/signin');
         } else {
           req.session.regenerate(() => {
             req.session.folderId = 0;
             req.session.user = result[0].id;
-            res.status(200).end();
+            res.redirect('/home');
           });
         }
       })
