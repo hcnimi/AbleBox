@@ -26,6 +26,8 @@ class AllFiles extends React.Component {
   }
 
   handleFiles(files) {
+    // add upload key to trigger upload upon FileListEntry mount
+    files.forEach(file => file.upload = true);
     this.setState({
       files: [...this.state.files].concat(files)
     });
@@ -37,12 +39,12 @@ class AllFiles extends React.Component {
   render () {
     return (
       <React.Fragment>
-        <Search searchHandler = {this.searchHandler}/>
-        <Dropzone files={this.state.files} inProgressFiles={this.state.inProgressFiles} handleFiles={this.handleFiles}>
-        {this.state.files.length
-          ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)
-          : null
-        }
+        <Search searchHandler={this.searchHandler}/>
+        <Dropzone files={this.state.files} handleFiles={this.handleFiles}>
+          {this.state.files.length
+            ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)
+            : null
+          }
         </Dropzone>
         <Row className="mt-3">
           <Col xs="12">

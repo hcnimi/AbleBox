@@ -9,40 +9,42 @@ class FileListEntry extends React.Component {
 
 		this.state = {
 			uploadProgress: 0,
-			showProgress: true
+			upload: !!this.props.file.upload
 		};
 	}
 
 	componentDidMount() {
-		const formData = new FormData();
+		if (this.state.upload) {
+			const formData = new FormData();
 
-		formData.append('file', this.props.file, this.props.file.name);
+			formData.append('file', this.props.file, this.props.file.name);
 
-	  const req = new XMLHttpRequest();
+		  const req = new XMLHttpRequest();
 
-	  req.open("POST", "/upload", true);
+		  req.open("POST", "/upload", true);
 
-		req.upload.addEventListener("progress", e => {
-      if (e.lengthComputable) {
-      	const progress = e.loaded / e.total * 100;
-        this.setState({uploadProgress: progress});
-        if (progress === 100) {
-        	setTimeout(() => {
-        		this.setState({showProgress: false});
-        	}, 800);
-        }
-      }
-    }, false);
+			req.upload.addEventListener("progress", e => {
+	      if (e.lengthComputable) {
+	      	const progress = e.loaded / e.total * 100;
+	        this.setState({uploadProgress: progress});
+	        if (progress === 100) {
+	        	setTimeout(() => {
+	        		this.setState({upload: false});
+	        	}, 800);
+	        }
+	      }
+	    }, false);
 
-	  req.onload = function(oEvent) {
-	    if (req.status == 200) {
-	    	// handle success
-	    } else {
-	    	// handle error
-	    }
-	  };
+		  req.onload = function(oEvent) {
+		    if (req.status == 200) {
+		    	// handle success
+		    } else {
+		    	// handle error
+		    }
+		  };
 
-	  req.send(formData);
+		  req.send(formData);
+		}
 	}
 
 	render() {
@@ -56,7 +58,7 @@ class FileListEntry extends React.Component {
 	   				<span style={{fontSize: '0.9em', color: 'gray'}}>{moment(this.props.file.lastModified).format('MM/DD/YY h:mm a')}</span>
 	   			</Col>
 	   		</Row>
-				{this.state.showProgress
+				{this.state.upload
 					? <Progress value={this.state.uploadProgress} />
 					: null
 				}
