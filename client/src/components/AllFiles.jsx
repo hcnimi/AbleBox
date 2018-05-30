@@ -16,10 +16,6 @@ class AllFiles extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
-
-    this.state = {
-      files: []
-    };
   }
 
   handleClick() {
@@ -54,6 +50,10 @@ class AllFiles extends React.Component {
   }
 
   render () {
+    if (!this.state) {
+      return null;
+    }
+
     return (
       <React.Fragment>
         <Search searchHandler={this.searchHandler}/>

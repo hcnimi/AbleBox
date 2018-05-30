@@ -104,7 +104,7 @@ app.use(session({
 }));
 
 var checkUser = (req, res, next) => {
-  if(req.session.id && req.session.isAuthenticated) {
+  if(req.session.user) {
     next();
   } else {
     res.redirect('/login');
@@ -112,27 +112,25 @@ var checkUser = (req, res, next) => {
 };
 
 app.get('/home', checkUser, (req, res) => {
-  res.status(200).end();
+  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 
 app.post('/signin', (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
-
   db.fetchUser(email, (err, result) => {
     if (err) {
       res.redirect(500, '/signin');
-    } else if (!result) {
+    } else if (!result.length) {
       res.redirect(401, '/signin');
     } else {
       bcrypt.compare(password, result[0].password, (err, match) => {
         if (!match) {
-          res.redirect('/login');
+          res.status(401).end();
         } else {
           req.session.regenerate(() => {
-            req.session.isAuthenticated = true;
             req.session.user = result[0].id;
-            res.redirect('/');
+            res.status(200).end();
           });
         }
       })
@@ -160,7 +158,6 @@ app.post('/signup', (req, res) => {
           res.redirect(500, '/signup');
         } else {
           req.session.regenerate(() => {
-            req.session.isAuthenticated = true;
             req.session.user = result.insertId;
             res.redirect('/home');
           });
@@ -198,7 +195,7 @@ app.post('/upload', upload.single('file'), function(req, res, next) {
   });
 });
 
-app.get('/getfiles', function(req, res) {
+app.get('/getfiles', checkUser, function(req, res) {
   db.getFiles(req.session.user.toString(), function(err, result) {
     if (err) {
       res.status = 404;
