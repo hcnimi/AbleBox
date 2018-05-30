@@ -131,7 +131,7 @@ app.post('/signin', (req, res) => {
         } else {
           req.session.regenerate(() => {
             req.session.isAuthenticated = true;
-            req.session.user = results.insertId;
+            req.session.user = result.insertId;
             res.redirect('/');
           });
         }
@@ -148,20 +148,20 @@ app.post('/signup', (req, res) => {
     }
     userData.password = hash;
   });
-  db.checkUserExists(userData.email, (err, results) => {
+  db.checkUserExists(userData.email, (err, result) => {
     if (err) {
       res.redirect(500, '/signup');
     }
-    if (results.length) {
+    if (result.length) {
       res.status(500).send('username already exists!');
     } else {
-      db.createUser(userData, (err, results) => {
+      db.createUser(userData, (err, result) => {
         if(err) {
           res.redirect(500, '/signup');
         } else {
           req.session.regenerate(() => {
             req.session.isAuthenticated = true;
-            req.session.user = results.insertId;
+            req.session.user = result.insertId;
             res.redirect('/home');
           });
         }
