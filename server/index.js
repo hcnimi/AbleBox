@@ -209,6 +209,21 @@ app.get('/getfiles', checkUser, function(req, res) {
   });
 });
 
+app.post('/searchfiles', checkUser, function(req, res) {
+  let keyword = req.body.keyword;
+  db.searchFiles(keyword, function(err, result) {
+    if (err) {
+      res.status = 404;
+      res.write(err);
+      res.end();
+    } else {
+      res.status = 200;
+      res.write(JSON.stringify(result));
+      res.end();
+    }
+  });
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });

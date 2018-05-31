@@ -47,6 +47,21 @@ class AllFiles extends React.Component {
   }
 
   searchHandler(value) {
+    let data = {'keyword': value};
+    $.ajax ({
+      type: 'POST',
+      url: '/searchfiles',
+      data: JSON.stringify(data),
+      contentType: 'application/json; charset=utf-8',
+      success: (data, textStatus, jqXHR) => {
+        this.setState({
+          files: JSON.parse(data),
+        })
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        alert('search handler error: ' + errorThrown);
+      },
+    });
   }
 
   render () {

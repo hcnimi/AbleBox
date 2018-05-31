@@ -99,10 +99,24 @@ const getFiles = (userId, cb) => {
   });
 };
 
+
+const searchFiles = (keyword, cb) => {
+  keyword = '%' + keyword + '%';
+  let query = 'SELECT id, file_name as name, created_on as lastModified FROM files WHERE file_name LIKE ?';
+  db.connection.query(query, keyword, (err, result, fields) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
 exports.fetchUser = fetchUser;
 exports.createUser = createUser;
 exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
 exports.getFiles = getFiles;
+exports.searchFiles = searchFiles;
 
