@@ -81,7 +81,7 @@ class Dropzone extends React.Component {
       } else {
         newState.dropzoneClass = [];
       }
-      
+
       return newState;
     });
 
@@ -105,6 +105,8 @@ class Dropzone extends React.Component {
           >
             {this.props.children
               ? this.props.children
+              : this.props.searchMode
+              ? <div></div>
               : <div className="dz-text">Drop files here to begin upload.</div>
             }
           </div>

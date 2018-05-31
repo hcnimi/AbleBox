@@ -13,9 +13,13 @@ class AllFiles extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      searchMode: false
+    };
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
+
   }
 
   handleClick() {
@@ -37,7 +41,7 @@ class AllFiles extends React.Component {
       contentType: 'application/json; charset=utf-8',
       success: (data, textStatus, jqXHR) => {
         this.setState({
-          files: JSON.parse(data),
+          files: JSON.parse(data)
         })
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -56,6 +60,7 @@ class AllFiles extends React.Component {
       success: (data, textStatus, jqXHR) => {
         this.setState({
           files: JSON.parse(data),
+          searchMode: true
         })
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -65,14 +70,14 @@ class AllFiles extends React.Component {
   }
 
   render () {
-    if (!this.state) {
+    if (!this.state.files) {
       return null;
     }
 
     return (
       <React.Fragment>
         <Search searchHandler={this.searchHandler}/>
-        <Dropzone files={this.state.files} handleFiles={this.handleFiles}>
+        <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode = {this.state.searchMode}>
           {this.state.files.length
             ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)
             : null
