@@ -87,7 +87,7 @@ var upload = multer({
   })
 });
 
-const createFolder = function(req, res, next){
+const createFolder = function(req, res, next) {
   //TODO: need to check for duplicates first before going to aws
   let params = {
     ACL: "private",
@@ -109,8 +109,7 @@ const createFolder = function(req, res, next){
     }
     */
   });
-}
-
+};
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -137,6 +136,8 @@ var checkUser = (req, res, next) => {
 };
 
 app.get('/home', checkUser, (req, res) => {
+  // delete folderId from sesh if home route (root folder) is hit, as folder_id in db for root is NULL
+  delete req.session.folderId;
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 
@@ -233,7 +234,6 @@ app.get('/getfiles', checkUser, function(req, res) {
     }
   });
 });
-
 
 app.post('/searchfiles', checkUser, function(req, res) {
   let keyword = req.body.keyword;

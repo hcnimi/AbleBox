@@ -7,42 +7,29 @@ USE `ablebox`;
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE users (
-  id integer AUTO_INCREMENT,
-  email varchar(200) NOT NULL,
-  password char(60) binary NOT NULL,
-  firstname varchar(100) NOT NULL,
-  lastname varchar(100) NOT NULL,
+  id MEDIUMINT(8) UNSIGNED AUTO_INCREMENT,
+  email VARCHAR(200) NOT NULL,
+  password CHAR(60) BINARY NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
   PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS `files`;
 
 CREATE TABLE files (
-  id integer AUTO_INCREMENT,
-  file_name varchar(200) NOT NULL,
-  file_ext varchar(200) NOT NULL,
-  folder_id integer,
-  created_by_user_id integer NOT NULL,
-  created_on timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  s3_objectId varchar(400) NOT NULL,
-  acl varchar(100) NOT NULL,
-  PRIMARY KEY (id)
+  id MEDIUMINT(8) UNSIGNED AUTO_INCREMENT,
+  user_id MEDIUMINT(8) UNSIGNED NOT NULL,
+  folder_id MEDIUMINT(8) UNSIGNED DEFAULT NULL,
+  name VARCHAR(200) NOT NULL,
+  file_ext VARCHAR(32) DEFAULT NULL,
+  created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  is_folder TINYINT(1) NOT NULL DEFAULT 0,
+  is_public TINYINT(1) NOT NULL DEFAULT 0,
+  s3_objectId VARCHAR(400) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  INDEX (folder_id),
+  INDEX (is_folder),
+  INDEX (is_public)
 );
-
-DROP TABLE IF EXISTS `folders`;
-
-CREATE TABLE folders (
-  id integer AUTO_INCREMENT,
-  folder_name varchar(200) NOT NULL,
-  parent_folderid integer,
-  full_path varchar(1000) NOT NULL,
-  acl varchar(100) NOT NULL,
-  created_by_user_id integer NOT NULL,
-  created_on timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
-);
-
-ALTER TABLE files ADD FOREIGN KEY (folder_id) REFERENCES folders (id);
-ALTER TABLE files ADD FOREIGN KEY (created_by_user_id) REFERENCES users (id);
-ALTER TABLE folders ADD FOREIGN KEY (created_by_user_id) REFERENCES users (id);
-

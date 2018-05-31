@@ -1,15 +1,14 @@
-var db = require('../db/index.js');
+const db = require('../db/index.js');
 
 const createUser = (user, cb) => {
-
-  let userDetails = {
+  const userDetails = {
     password:  user.password,
     email: user.email,
-    firstname: user.firstname,
-    lastname: user.lastname
+    first_name: user.firstname,
+    last_name: user.lastname
   };
 
-  let query = 'INSERT INTO users SET ?';
+  const query = 'INSERT INTO users SET ?';
 
   db.connection.query(query, userDetails, function(err, result, fields) {
     if (err) {
@@ -21,8 +20,8 @@ const createUser = (user, cb) => {
 };
 
 const checkUserExists = (email, cb) => {
+  const query = 'SELECT email FROM users WHERE email = ?';
 
-  let query = 'SELECT email FROM users WHERE email = ?';
   db.connection.query(query, email, function(err, result, fields) {
     if (err) {
       cb(err, null);
@@ -30,11 +29,10 @@ const checkUserExists = (email, cb) => {
       cb(null, result);
     }
   });
-
 };
 
 const fetchUser = (email, cb) => {
-  let query = 'SELECT * FROM users WHERE email = ?';
+  const query = 'SELECT * FROM users WHERE email = ?';
 
   db.connection.query(query, email, (err, result, fields) => {
     if (err) {
@@ -46,16 +44,15 @@ const fetchUser = (email, cb) => {
 };
 
 const createFile = (req, cb) => {
-  let fileDetails = {
-    file_name: req.file.originalname,
+  const fileDetails = {
+    name: req.file.originalname,
+    folder_id: req.session.folderId,
     file_ext: req.file.contentType,
-    folder_id: null, //not sure what this will be yet
-    created_by_user_id: req.session.user,
-    s3_objectId: req.file.key,
-    acl: req.file.acl,
+    user_id: req.session.user,
+    s3_objectId: req.file.key
   };
 
-  let query = 'INSERT INTO files SET ?';
+  const query = 'INSERT INTO files SET ?';
 
   db.connection.query(query, fileDetails, function(err, result, fields) {
     if (err) {
@@ -67,16 +64,15 @@ const createFile = (req, cb) => {
 };
 
 const createFolder = (req, cb) => {
+  const folderDetails = {
+    name: req.body.folderName,
+    folder_id: req.session.folderId,
+    user_id: req.session.user,
+    s3_objectId: `${req.session.user}/${req.body.folderName}/`,
+    is_folder: 1
+  };
 
-  let folderDetails = {
-    folder_name: req.body.folderName,
-    parent_folderid: null, //leaving this null for now since for root only
-    full_path: `${req.session.user}/${req.body.folderName}/`, //leaving this for root only for now
-    created_by_user_id: req.session.user,
-    acl: 'private', //private by default
-  }
-
-  let query = 'INSERT INTO folders SET ?';
+  const query = 'INSERT INTO files SET ?';
 
   db.connection.query(query, folderDetails, function(err, result, fields) {
     if (err) {
@@ -88,7 +84,7 @@ const createFolder = (req, cb) => {
 };
 
 const getFiles = (userId, cb) => {
-  let query = 'SELECT id, file_name as name, created_on as lastModified FROM files WHERE created_by_user_id = ?';
+  const query = 'SELECT id, name, created_on as lastModified, is_folder FROM files WHERE user_id = ? ORDER BY is_folder DESC, name';
 
   db.connection.query(query, userId, (err, result, fields) => {
     if (err) {
@@ -99,10 +95,11 @@ const getFiles = (userId, cb) => {
   });
 };
 
-
 const searchFiles = (keyword, cb) => {
   keyword = '%' + keyword + '%';
-  let query = 'SELECT id, file_name as name, created_on as lastModified FROM files WHERE file_name LIKE ?';
+
+  const query = 'SELECT id, name, created_on AS lastModified FROM files WHERE name LIKE ?';
+
   db.connection.query(query, keyword, (err, result, fields) => {
     if (err) {
       cb(err, null);
@@ -120,4 +117,3 @@ exports.createFolder = createFolder;
 exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;
 exports.createFolder = createFolder;
-
