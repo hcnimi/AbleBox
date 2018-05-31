@@ -3,10 +3,11 @@ import FileListEntry from './FileListEntry.jsx';
 import Files from '../data/mockData.js';
 import Dropzone from './Dropzone.jsx';
 import { withRouter } from 'react-router-dom';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import css from '../styles/AllFiles.css';
 import Search from './Search.jsx';
 import $ from "jquery";
+import createFolderIcon from '../assets/createFolder.png';
 
 
 class AllFiles extends React.Component {
@@ -14,12 +15,18 @@ class AllFiles extends React.Component {
     super(props);
 
     this.state = {
-      searchMode: false
+      searchMode: false,
+      folderName: '',
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
-
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.createFolder = this.createFolder.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleFiles = this.handleFiles.bind(this);
+    this.searchHandler = this.searchHandler.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
   handleClick() {
@@ -30,7 +37,7 @@ class AllFiles extends React.Component {
     // add upload key to trigger upload upon FileListEntry mount
     files.forEach(file => file.upload = true);
     this.setState({
-      files: [...this.state.files].concat(files)
+      files: [...this.state.files].concat(files),
     });
   }
 
@@ -69,6 +76,38 @@ class AllFiles extends React.Component {
     });
   }
 
+  createFolder() {
+    const data = {
+      folderName: this.state.folderName,
+    };
+    $.ajax ({
+      type: 'POST',
+      url: '/createFolder',
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify(data),
+      success: (data, textStatus, jqXHR) => {
+        this.toggle();
+        this.componentDidMount();
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        this.toggleError();
+      },
+    });
+  }
+
+  handleTitleChange(e) {
+    e.preventDefault();
+    this.setState({
+      folderName: e.target.value
+    });
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  }
+
   render () {
     if (!this.state.files) {
       return null;
@@ -76,7 +115,26 @@ class AllFiles extends React.Component {
 
     return (
       <React.Fragment>
-        <Search searchHandler={this.searchHandler}/>
+        <Row className="mt-3">
+          <Col xs="10" sm="10" md="10" lg="10">
+           <Search searchHandler={this.searchHandler}/>
+          </Col>
+          <Col xs="2" sm="2" md="2" lg="2">
+            <Button className="btn-sm btn-link shadow-sm" onClick={this.toggle} type="download">
+              <img width="30px" background="transparent" src={createFolderIcon} alt="createFolder"/>
+            </Button>
+            <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+              <ModalHeader toggle={this.toggle}>Folder Name</ModalHeader>
+              <ModalBody>
+                <Input onChange={this.handleTitleChange}/>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" disabled={!this.state.folderName.length} onClick={this.createFolder}>Create Folder</Button>
+                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
+          </Col>
+        </Row>
         <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode = {this.state.searchMode}>
           {this.state.files.length
             ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)

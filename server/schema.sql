@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS `folders`;
 CREATE TABLE folders (
   id integer AUTO_INCREMENT,
   folder_name varchar(200) NOT NULL,
-  parent_folderid integer NOT NULL,
+  parent_folderid integer,
   full_path varchar(1000) NOT NULL,
   acl varchar(100) NOT NULL,
   created_by_user_id integer NOT NULL,

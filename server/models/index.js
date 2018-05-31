@@ -66,15 +66,15 @@ const createFile = (req, cb) => {
   });
 };
 
-const createFolder = (folder, cb) => {
+const createFolder = (req, cb) => {
 
   let folderDetails = {
-    folder_name: folder.folder_name,
-    parent_folderid: folder.parent_folderid,
-    full_path: folder.full_path,
-    created_by_user_id: folder.created_by_user_id,
-    acl: folder.acl
-  };
+    folder_name: req.body.folderName,
+    parent_folderid: null, //leaving this null for now since for root only
+    full_path: `${req.session.user}/${req.body.folderName}/`, //leaving this for root only for now
+    created_by_user_id: req.session.user,
+    acl: 'private', //private by default
+  }
 
   let query = 'INSERT INTO folders SET ?';
 
@@ -119,4 +119,5 @@ exports.createFile = createFile;
 exports.createFolder = createFolder;
 exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;
+exports.createFolder = createFolder;
 

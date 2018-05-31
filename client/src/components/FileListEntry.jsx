@@ -1,6 +1,7 @@
 import React from 'react';
-import { Row, Col, Progress } from 'reactstrap';
+import { Button, Row, Col, Progress } from 'reactstrap';
 import moment from 'moment';
+import downloadIcon from '../assets/download.png';
 import css from './../styles/FileListEntry.css';
 
 class FileListEntry extends React.Component {
@@ -57,6 +58,11 @@ class FileListEntry extends React.Component {
 		  		<Col sm="auto">
 	   				<span style={{fontSize: '0.9em', color: 'gray'}}>{moment(this.props.file.lastModified).format('MM/DD/YY h:mm a')}</span>
 	   			</Col>
+          <Col sm="auto">
+            <Button className="btn-sm btn-link shadow-sm" type="download">
+              <img width="30px" background="transparent" src={downloadIcon} alt="Download"/>
+            </Button>
+          </Col>
 	   		</Row>
 				{this.state.upload
 					? <Progress value={this.state.uploadProgress} />

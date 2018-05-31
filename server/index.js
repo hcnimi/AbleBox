@@ -87,6 +87,31 @@ var upload = multer({
   })
 });
 
+const createFolder = function(req, res, next){
+  //TODO: need to check for duplicates first before going to aws
+  let params = {
+    ACL: "private",
+    Bucket: ABLEBOX_BUCKET,
+    Key: `${req.session.user}/${req.body.folderName}/`,
+  };
+  s3.putObject(params, function(err, data) {
+    if (err) {
+      res.status = 400;
+      res.write("ERROR CREATING OBJECT");
+      res.end();
+    } else {
+      next();
+    }
+    /*
+    data = {
+    ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
+    VersionId: "Kirh.unyZwjQ69YxcQLA8z4F5j3kJJKr"
+    }
+    */
+  });
+}
+
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(function(req, res, next) {
@@ -209,6 +234,7 @@ app.get('/getfiles', checkUser, function(req, res) {
   });
 });
 
+
 app.post('/searchfiles', checkUser, function(req, res) {
   let keyword = req.body.keyword;
   db.searchFiles(keyword, function(err, result) {
@@ -219,6 +245,19 @@ app.post('/searchfiles', checkUser, function(req, res) {
     } else {
       res.status = 200;
       res.write(JSON.stringify(result));
+    }
+  });
+});
+
+app.post('/createFolder', createFolder, function(req, res) {
+  db.createFolder(req, function(err, result) {
+    if (err) {
+      res.status = 404;
+      res.write('UNABLE TO CREATE FOLDER');
+      res.end();
+    } else {
+      res.status = 200;
+      res.write('Successfully created folder!');
       res.end();
     }
   });
