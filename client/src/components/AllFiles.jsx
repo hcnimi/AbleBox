@@ -18,6 +18,7 @@ class AllFiles extends React.Component {
       searchMode: false,
       folderName: '',
     };
+
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
@@ -29,19 +30,11 @@ class AllFiles extends React.Component {
     this.toggle = this.toggle.bind(this);
   }
 
-  handleClick() {
-    document.querySelector('#upload').click();
-  }
-
-  handleFiles(files) {
-    // add upload key to trigger upload upon FileListEntry mount
-    files.forEach(file => file.upload = true);
-    this.setState({
-      files: [...this.state.files].concat(files),
-    });
-  }
-
   componentDidMount() {
+    this.getFiles();
+  }
+
+  getFiles() {
     $.ajax ({
       type: 'GET',
       url: '/getfiles',
@@ -54,6 +47,18 @@ class AllFiles extends React.Component {
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         alert(errorThrown); // need to decide on what we are doing here with the error
       },
+    });
+  }
+
+  handleClick() {
+    document.querySelector('#upload').click();
+  }
+
+  handleFiles(files) {
+    // add upload key to trigger upload upon FileListEntry mount
+    files.forEach(file => file.upload = true);
+    this.setState({
+      files: [...this.state.files].concat(files),
     });
   }
 
@@ -87,7 +92,7 @@ class AllFiles extends React.Component {
       data: JSON.stringify(data),
       success: (data, textStatus, jqXHR) => {
         this.toggle();
-        this.componentDidMount();
+        this.getFiles();
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         this.toggleError();
@@ -135,7 +140,7 @@ class AllFiles extends React.Component {
             </Modal>
           </Col>
         </Row>
-        <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode = {this.state.searchMode}>
+        <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode={this.state.searchMode}>
           {this.state.files.length
             ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)
             : null

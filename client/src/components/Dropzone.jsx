@@ -13,14 +13,14 @@ class Dropzone extends React.Component {
 
     this.state = {
       dragCounter: 0,
-      dropzoneClass: []
+      dropzoneClass: props.children ? [] : ['empty']
     };
   }
 
-  componentDidMount() {
-    if (!this.props.children) {
-      this.setState({dropzoneClass: ['empty']});
-    }
+  static getDerivedStateFromProps(props) {
+    return {
+      dropzoneClass: props.children ? [] : ['empty']
+    };
   }
 
   dragOverHandler(e) {
