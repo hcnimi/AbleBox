@@ -95,10 +95,24 @@ const getFiles = (userId, cb) => {
   });
 };
 
+const openFolder = (folderId, cb) => {
+
+  let query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE folder_id = ? ORDER BY is_folder DESC, name';
+
+  db.connection.query(query, folderId, (err, result, fields) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
+
 const searchFiles = (keyword, cb) => {
   keyword = '%' + keyword + '%';
 
-  const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE name LIKE ? ORDER BY is_folder DESC, name';
+  let query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE name LIKE ? ORDER BY is_folder DESC, name';
 
   db.connection.query(query, keyword, (err, result, fields) => {
     if (err) {
@@ -127,6 +141,7 @@ exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
 exports.getFiles = getFiles;
+exports.openFolder = openFolder;
 exports.searchFiles = searchFiles;
 exports.createFolder = createFolder;
 exports.changeFilePermissions = changeFilePermissions;

@@ -28,6 +28,7 @@ class AllFiles extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
     this.searchHandler = _.debounce(this.searchHandler.bind(this), 500);
+    this.openFolder = this.openFolder.bind(this);
     this.toggle = this.toggle.bind(this);
   }
 
@@ -65,7 +66,7 @@ class AllFiles extends React.Component {
 
   searchHandler(value) {
     let data = {'keyword': value};
-    $.ajax ({
+    $.ajax({
       type: 'POST',
       url: '/searchfiles',
       data: JSON.stringify(data),
@@ -74,11 +75,11 @@ class AllFiles extends React.Component {
         this.setState({
           files: JSON.parse(data),
           searchMode: true
-        })
+        });
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         alert('search handler error: ' + errorThrown);
-      },
+      }
     });
   }
 
@@ -97,6 +98,24 @@ class AllFiles extends React.Component {
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         this.toggleError();
+      },
+    });
+  }
+
+  openFolder(folderId) {
+    let data = {folderId: folderId};
+    $.ajax ({
+      type: 'POST',
+      url: '/openFolder',
+      data: JSON.stringify(data),
+      contentType: 'application/json; charset=utf-8',
+      success: (data, textStatus, jqXHR) => {
+        this.setState({
+          files: JSON.parse(data)
+        })
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        alert('search handler error: ' + errorThrown);
       },
     });
   }
@@ -143,7 +162,7 @@ class AllFiles extends React.Component {
         </Row>
         <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode={this.state.searchMode}>
           {this.state.files.length
-            ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} />)
+            ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} openFolder={this.openFolder} />)
             : null
           }
         </Dropzone>

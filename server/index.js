@@ -235,6 +235,24 @@ app.get('/getfiles', checkUser, function(req, res) {
   });
 });
 
+app.post('/openfolder', checkUser, function(req, res) {
+  let folderId = req.body.folderId;
+  if(folderId) {
+    db.openFolder(folderId, function(err, result) {
+      if (err) {
+        res.status = 404;
+        res.write(err);
+        res.end();
+      } else {
+        res.status = 200;
+        req.session.folderId = folderId;
+        res.write(JSON.stringify(result));
+        res.end();
+      }
+    });
+  }
+});
+
 app.post('/searchfiles', checkUser, function(req, res) {
   let keyword = req.body.keyword;
   db.searchFiles(keyword, function(err, result) {
@@ -258,7 +276,7 @@ app.post('/createFolder', createFolder, function(req, res) {
       res.end();
     } else {
       res.status = 200;
-      res.write('Successfully created folder!');
+      res.write(JSON.stringify({folder_id: result.insertId}));
       res.end();
     }
   });
