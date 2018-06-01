@@ -84,7 +84,7 @@ const createFolder = (req, cb) => {
 };
 
 const getFiles = (userId, cb) => {
-  const query = 'SELECT id, name, created_on as lastModified, is_folder FROM files WHERE user_id = ? ORDER BY is_folder DESC, name';
+  const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? ORDER BY is_folder DESC, name';
 
   db.connection.query(query, userId, (err, result, fields) => {
     if (err) {
@@ -109,6 +109,18 @@ const searchFiles = (keyword, cb) => {
   });
 };
 
+const changeFilePermissions = (id, permission, cb) => {
+  let query = 'UPDATE files SET is_public = ? WHERE id = ?';
+
+  db.connection.query(query, [permission, id], (err, result, fields) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
 exports.fetchUser = fetchUser;
 exports.createUser = createUser;
 exports.checkUserExists = checkUserExists;
@@ -117,3 +129,4 @@ exports.createFolder = createFolder;
 exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;
 exports.createFolder = createFolder;
+exports.changeFilePermissions = changeFilePermissions;

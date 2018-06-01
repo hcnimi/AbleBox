@@ -3,7 +3,7 @@ import { Row, Col, Button, Form, FormGroup, FormControl, Label, Input } from 're
 import { withRouter } from 'react-router-dom';
 import $ from 'jquery';
 
-class SignIn extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ class SignIn extends React.Component {
       [e.target.name]: e.target.value
     });
   }
-  
+
   handleSubmit(e) {
     e.preventDefault();
     var data = {
@@ -29,7 +29,7 @@ class SignIn extends React.Component {
     };
     $.ajax ({
       type: 'POST',
-      url: '/signin',
+      url: '/login',
       data: JSON.stringify(data),
       contentType: 'application/json; charset=utf-8',
     })
@@ -37,7 +37,7 @@ class SignIn extends React.Component {
       this.props.history.push('/home');
     })
     .fail(() => {
-      console.log('failed to login');
+      alert('failed to login');
     });
   }
 
@@ -67,11 +67,11 @@ class SignIn extends React.Component {
               </Col>
             </Row>
             <br/>
-            <Button className="d-block mx-auto btn-outline-primary" type="submit">Sign In</Button>
+            <Button className="d-block mx-auto btn-outline-primary" type="submit">Login</Button>
           </Form>
       </div>
     )
   }
 }
 
-export default withRouter(SignIn);
+export default withRouter(Login);

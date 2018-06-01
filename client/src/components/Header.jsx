@@ -40,9 +40,6 @@ class Header extends React.Component {
                 <NavLink tag={Link} to='/home'>Home</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink tag={Link} to='/upload'>Upload</NavLink>
-              </NavItem>
-              <NavItem>
                 <NavLink href="/logout">Sign Out</NavLink>
               </NavItem>
             </Nav>

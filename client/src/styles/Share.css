@@ -1,0 +1,7 @@
+.share {
+  font-family: 'Roboto', sans-serif;
+  border-top: 1px solid lightgray;
+}
+.share:last-child {
+  border-bottom: 1px solid lightgray;
+}

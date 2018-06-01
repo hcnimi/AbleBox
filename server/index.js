@@ -141,14 +141,14 @@ app.get('/home', checkUser, (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 
-app.post('/signin', (req, res) => {
+app.post('/login', (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   db.fetchUser(email, (err, result) => {
     if (err) {
-      res.redirect(500, '/signin');
+      res.redirect(500, '/login');
     } else if (!result.length) {
-      res.redirect(401, '/signin');
+      res.redirect(401, '/login');
     } else {
       bcrypt.compare(password, result[0].password, (err, match) => {
         if (!match) {
@@ -259,6 +259,19 @@ app.post('/createFolder', createFolder, function(req, res) {
       res.status = 200;
       res.write('Successfully created folder!');
       res.end();
+    }
+  });
+});
+
+app.get('/share', (req, res) => {
+  let fileId = req.query.id;
+  let permission = !req.query.is_public;
+
+  db.changeFilePermissions(fileId, permission, (err, result) => {
+    if (err) {
+      res.redirect(500, '/home');
+    } else {
+      res.status(201).end();
     }
   });
 });
