@@ -3,6 +3,8 @@ import { Row, Col, Progress } from 'reactstrap';
 import moment from 'moment';
 import css from './../styles/FileListEntry.css';
 import Share from './Share.jsx';
+import fileIcon from '../assets/file.png';
+import folderIcon from '../assets/Folder.png';
 
 class FileListEntry extends React.Component {
 	constructor(props) {
@@ -59,7 +61,11 @@ class FileListEntry extends React.Component {
 		  <Col xs="auto" className="file-list-entry py-3">
 		  	<Row className="justify-content-between">
 		  		<Col sm="auto">
-	   				<span>{this.props.file.name}</span>
+		  			{this.props.file.is_folder
+			  			? <img width="30px" src={folderIcon} alt="folder icon"/>
+			  			: <img width="30px" src={fileIcon} alt="file icon"/>
+		  			}
+	   				<span> {this.props.file.name}</span>
 	   			</Col>
 		  		<Col sm="auto">
 	   				<span style={{fontSize: '0.9em', color: 'gray'}}>{moment(this.props.file.lastModified).format('MM/DD/YY h:mm a')}</span>

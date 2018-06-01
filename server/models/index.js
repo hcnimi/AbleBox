@@ -98,7 +98,7 @@ const getFiles = (userId, cb) => {
 const searchFiles = (keyword, cb) => {
   keyword = '%' + keyword + '%';
 
-  const query = 'SELECT id, name, created_on AS lastModified FROM files WHERE name LIKE ?';
+  const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE name LIKE ? ORDER BY is_folder DESC, name';
 
   db.connection.query(query, keyword, (err, result, fields) => {
     if (err) {
