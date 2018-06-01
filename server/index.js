@@ -245,6 +245,7 @@ app.post('/searchfiles', checkUser, function(req, res) {
     } else {
       res.status = 200;
       res.write(JSON.stringify(result));
+      res.end();
     }
   });
 });

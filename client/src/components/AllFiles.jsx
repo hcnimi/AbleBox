@@ -8,6 +8,7 @@ import css from '../styles/AllFiles.css';
 import Search from './Search.jsx';
 import $ from "jquery";
 import createFolderIcon from '../assets/createFolder.png';
+import _ from 'lodash';
 
 
 class AllFiles extends React.Component {
@@ -26,7 +27,7 @@ class AllFiles extends React.Component {
     this.createFolder = this.createFolder.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
-    this.searchHandler = this.searchHandler.bind(this);
+    this.searchHandler = _.debounce(this.searchHandler.bind(this), 500);
     this.toggle = this.toggle.bind(this);
   }
 
