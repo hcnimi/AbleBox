@@ -47,7 +47,7 @@ class FileListEntry extends React.Component {
 		    	// handle error
 		    }
 		  };
-		  console.log('formData', formData);
+      
 		  req.send(formData);
 		}
 	}
