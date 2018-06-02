@@ -168,3 +168,4 @@ exports.createFolder = createFolder;
 exports.shareFileExistingUser = shareFileExistingUser;
 exports.shareFilePendingUser = shareFilePendingUser;
 exports.searchPath = searchPath;
+exports.checkUserExists = checkUserExists;
