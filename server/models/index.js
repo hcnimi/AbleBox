@@ -154,6 +154,8 @@ const searchPath = (userId, folderId, cb) => {
       cb(null, result);
     }
   });
+}
+
 exports.fetchUser = fetchUser;
 exports.createUser = createUser;
 exports.createFile = createFile;
