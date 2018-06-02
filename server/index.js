@@ -38,7 +38,6 @@ app.use(session({
   cookie: { maxAge: 60000 }
 }));
 
-
 var deleteObject = function(objectKey) {
   var params = {
     Bucket: ABLEBOX_BUCKET,
@@ -144,6 +143,7 @@ app.get('/home', checkUser, (req, res) => {
 app.post('/login', (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
+
   db.fetchUser(email, (err, result) => {
     if (err) {
       res.redirect(500, '/login');
@@ -167,6 +167,7 @@ app.post('/login', (req, res) => {
 
 app.post('/signup', (req, res) => {
   let userData = req.body;
+
   bcrypt.hash(userData.password, null, null, (err, hash) => {
     if (err) {
       res.redirect(500, '/signup');
@@ -224,7 +225,8 @@ app.post('/upload', upload.single('file'), function(req, res, next) {
 
 app.get('/getfiles', checkUser, function(req, res) {
   let folderId = req.session.folderId;
-  db.getFiles(req.session.user, folderId, function(err, result) {
+  let userId = req.session.user;
+  db.getFiles(userId, folderId, function(err, result) {
     if (err) {
       res.status = 404;
       res.write(err);
@@ -240,6 +242,7 @@ app.get('/getfiles', checkUser, function(req, res) {
 app.get('/folder/:folderid', checkUser, function(req, res) {
   let folderId = req.params.folderid;
   let user_id = req.session.user;
+
   if(folderId) {
     db.getFiles(user_id, folderId, function(err, result) {
       if (err) {
@@ -248,9 +251,14 @@ app.get('/folder/:folderid', checkUser, function(req, res) {
         res.end();
       } else {
         res.status = 200;
-        req.session.folderId = folderId;
-        res.write(JSON.stringify(result));
-        res.end();
+        db.searchPath(user_id, folderId, function(err2, path) {
+          req.session.folderId = folderId;
+          let data = {'result': result,
+                      'path': path };
+          res.write(JSON.stringify(data));
+          res.end();
+        });
+
       }
     });
   }
@@ -259,6 +267,7 @@ app.get('/folder/:folderid', checkUser, function(req, res) {
 app.post('/searchfiles', checkUser, function(req, res) {
   let keyword = req.body.keyword;
   let user_id = req.session.user;
+
   db.searchFiles(user_id, keyword, function(err, result) {
     if (err) {
       res.status = 404;
