@@ -24,6 +24,7 @@ class AllFiles extends React.Component {
     this.handleFiles = this.handleFiles.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.createFolder = this.createFolder.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
@@ -125,6 +126,12 @@ class AllFiles extends React.Component {
     });
   }
 
+  handleKeyPress(e, cb) {
+    if(e.charCode === 13 && e.target.value.length) {
+      cb();
+    }
+  }
+
   toggle() {
     this.setState({
       modal: !this.state.modal,
@@ -140,7 +147,7 @@ class AllFiles extends React.Component {
       <React.Fragment>
         <Row className="mt-3">
           <Col xs="10" sm="10" md="10" lg="10">
-           <Search searchHandler={this.searchHandler}/>
+           <Search searchHandler={this.searchHandler} handleKeyPress ={this.handleKeyPress} />
           </Col>
           <Col xs="2" sm="2" md="2" lg="2">
             <Button className="btn-sm btn-link shadow-sm" onClick={this.toggle} type="download">
@@ -149,7 +156,7 @@ class AllFiles extends React.Component {
             <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
               <ModalHeader toggle={this.toggle}>Folder Name</ModalHeader>
               <ModalBody>
-                <Input onChange={this.handleTitleChange}/>
+                <Input onChange={this.handleTitleChange} onKeyPress={(e)=>{this.handleKeyPress(e, this.createFolder)}}/>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" disabled={!this.state.folderName.length} onClick={this.createFolder}>Create Folder</Button>
