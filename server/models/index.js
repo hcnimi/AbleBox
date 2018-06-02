@@ -149,6 +149,20 @@ const verifyFilePermissions = (userId, cb) => {
 
 };
 
+const verifyFilePermissions = (userId, cb) => {
+
+  const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
+
+  db.connection.query(query, [userId], function(err, result, fields) {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+
+};
+
 exports.fetchUser = fetchUser;
 exports.createUser = createUser;
 exports.checkUserExists = checkUserExists;
