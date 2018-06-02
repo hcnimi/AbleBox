@@ -191,5 +191,4 @@ exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;
 exports.searchPath = searchPath;
 exports.shareFileExistingUser = shareFileExistingUser;
-exports.shareFilePendingUser = shareFilePendingUser;
-exports.createFolder = createFolder;
+exports.shareFilePendingUser = shareFilePendingUser
