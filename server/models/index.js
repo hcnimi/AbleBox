@@ -97,7 +97,7 @@ const getFiles = (userId, folderId, cb) => {
 const searchFiles = (userId, keyword, cb) => {
   keyword = '%' + keyword + '%';
 
-  let query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND name LIKE ? ORDER BY is_folder DESC, name';
+  const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND name LIKE ? ORDER BY is_folder DESC, name';
 
   db.connection.query(query, [userId, keyword], (err, result, fields) => {
     if (err) {
@@ -108,7 +108,23 @@ const searchFiles = (userId, keyword, cb) => {
   });
 };
 
+const searchPath = (userId, folderId, cb) => {
+
+  const query = '(SELECT SF.folder_id, F.name FROM (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id = ?)) AS SF LEFT JOIN files As F ON SF.folder_id = F.id)  UNION (SELECT id, name FROM files WHERE user_id = ? AND id = ? )';
+
+  const data = [userId, userId, userId, folderId, userId, userId, folderId, userId, folderId, userId, folderId];
+
+  db.connection.query(query, data, (err, result, fields) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+}
+
 const changeFilePermissions = (id, permission, cb) => {
+
   let query = 'UPDATE files SET is_public = ? WHERE id = ?';
 
   db.connection.query(query, [permission, id], (err, result, fields) => {
@@ -120,12 +136,14 @@ const changeFilePermissions = (id, permission, cb) => {
   });
 };
 
-exports.fetchUser = fetchUser;
-exports.createUser = createUser;
+
+exports.changeFilePermissions = changeFilePermissions;
 exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
+exports.createUser = createUser;
+exports.fetchUser = fetchUser;
 exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;
-exports.createFolder = createFolder;
-exports.changeFilePermissions = changeFilePermissions;
+exports.searchPath = searchPath;
+

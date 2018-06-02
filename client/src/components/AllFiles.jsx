@@ -2,6 +2,7 @@ import React from 'react';
 import FileListEntry from './FileListEntry.jsx';
 import Files from '../data/mockData.js';
 import Dropzone from './Dropzone.jsx';
+import Path from './Path.jsx';
 import { withRouter } from 'react-router-dom';
 import { Row, Col, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import css from '../styles/AllFiles.css';
@@ -18,6 +19,7 @@ class AllFiles extends React.Component {
     this.state = {
       searchMode: false,
       folderName: '',
+      path: []
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -110,7 +112,8 @@ class AllFiles extends React.Component {
       contentType: 'application/json; charset=utf-8',
       success: (data, textStatus, jqXHR) => {
         this.setState({
-          files: JSON.parse(data)
+          files: JSON.parse(data).result,
+          path: JSON.parse(data).path
         })
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -165,6 +168,7 @@ class AllFiles extends React.Component {
             </Modal>
           </Col>
         </Row>
+        <Path path = {this.state.path}/>
         <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode={this.state.searchMode}>
           {this.state.files.length
             ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} openFolder={this.openFolder} />)

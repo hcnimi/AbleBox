@@ -224,7 +224,8 @@ app.post('/upload', upload.single('file'), function(req, res, next) {
 
 app.get('/getfiles', checkUser, function(req, res) {
   let folderId = req.session.folderId;
-  db.getFiles(req.session.user, folderId, function(err, result) {
+  let userId = req.session.user;
+  db.getFiles(userId, folderId, function(err, result) {
     if (err) {
       res.status = 404;
       res.write(err);
@@ -248,9 +249,14 @@ app.get('/folder/:folderid', checkUser, function(req, res) {
         res.end();
       } else {
         res.status = 200;
-        req.session.folderId = folderId;
-        res.write(JSON.stringify(result));
-        res.end();
+        db.searchPath(user_id, folderId, function(err2, path) {
+          req.session.folderId = folderId;
+          let data = {'result': result,
+                      'path': path };
+          res.write(JSON.stringify(data));
+          res.end();
+        });
+
       }
     });
   }
