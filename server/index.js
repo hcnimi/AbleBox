@@ -315,9 +315,11 @@ app.post('/share', (req, res) => {
   db.checkUserExists(req.body.email, (err, result) => {
     if (err) {
       res.status(500).end();
-    } else if (result.lenth) {
-      db.shareFileExistingUser(req.body.file, req.body.email, cb);
+    } else if (result.length) {
+      console.log('result0', result);
+      db.shareFileExistingUser(req.body.file, req.session.user, cb);
     } else {
+      console.log('result 322', result);
       db.shareFilePendingUser(req.body.file, req.body.email, cb);
     }
   });

@@ -108,16 +108,16 @@ const searchFiles = (userId, keyword, cb) => {
   });
 };
 
-const shareFileExistingUser = (file, cb) => {
+const shareFileExistingUser = (file, userId, cb) => {
+  console.log('file', file);
   const query = 'INSERT INTO collab SET ?';
   const values = {
     file_id: file.id,
     folder_id: file.folder_id,
-    user_id: user.firstname,
-    last_name: user.lastname
+    user_id: userId
   };
 
-  db.connection.query(query, [permission, id], (err, result, fields) => {
+  db.connection.query(query, values, (err, result, fields) => {
     if (err) {
       cb(err, null);
     } else {
@@ -143,7 +143,6 @@ const shareFilePendingUser = (file, email, cb) => {
 };
 
 const verifyFilePermissions = (userId, cb) => {
-
   const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
 
   db.connection.query(query, [userId], function(err, result, fields) {
@@ -153,7 +152,6 @@ const verifyFilePermissions = (userId, cb) => {
       cb(null, result);
     }
   });
-
 };
 
 exports.fetchUser = fetchUser;
