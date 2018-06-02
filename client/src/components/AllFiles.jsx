@@ -168,7 +168,7 @@ class AllFiles extends React.Component {
             </Modal>
           </Col>
         </Row>
-        <Path path = {this.state.path}/>
+        <Path path = {this.state.path} openFolder = {this.openFolder}/>
         <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode={this.state.searchMode}>
           {this.state.files.length
             ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} openFolder={this.openFolder} />)
