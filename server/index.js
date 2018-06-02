@@ -333,17 +333,21 @@ app.post('/createFolder', createFolder, function(req, res) {
   });
 });
 
-app.get('/share', (req, res) => {
-  let fileId = req.query.id;
-  let permission = !req.query.is_public;
-
-  db.changeFilePermissions(fileId, permission, (err, result) => {
+app.post('/share', (req, res) => {
+  let cb = (err, result) => {
     if (err) {
       res.redirect(500, '/home');
     } else {
       res.status(201).end();
     }
   });
+  // if user exists
+  //  update collab table
+  // else
+  //  update pending table
+  if (checkUserExists)
+    db.shareFileExistingUser(file, email, cb);
+    db.shareFilePendingUser(file, email, cb);
 });
 
 app.get('*', (req, res) => {

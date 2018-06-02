@@ -23,7 +23,10 @@ class Share extends React.Component {
     $.ajax({
       type: 'POST',
       url: '/share',
-      data: this.props.file,
+      data: {
+        email: this.state.email,
+        file: this.props.file
+      },
       contentType: 'application/json; charset=utf-8',
     })
     .done(() => {
