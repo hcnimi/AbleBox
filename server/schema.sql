@@ -44,9 +44,7 @@ CREATE TABLE collab (
   PRIMARY KEY (id),
   FOREIGN KEY (file_id) REFERENCES files(id),
   FOREIGN KEY (user_id) REFERENCES users(id),
-  INDEX (file_id),
-  INDEX (folder_id),
-  INDEX (user_id)
+  INDEX (folder_id)
 );
 
 DROP TABLE IF EXISTS `pending_user_share`;

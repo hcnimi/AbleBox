@@ -121,20 +121,22 @@ const searchFiles = (userId, keyword, cb) => {
   });
 };
 
-const searchPath = (userId, folderId, cb) => {
 
-  const query = '(SELECT SF.folder_id, F.name FROM (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id = ?)) AS SF LEFT JOIN files As F ON SF.folder_id = F.id)  UNION (SELECT id, name FROM files WHERE user_id = ? AND id = ? )';
+const shareFilePendingUser = (file, email, cb) => {
+  const query = 'INSERT INTO pending_user_share SET ?';
+  const values = {
+    file_id: file.id,
+    email: email
+  };
 
-  const data = [userId, userId, userId, folderId, userId, userId, folderId, userId, folderId, userId, folderId];
-
-  db.connection.query(query, data, (err, result, fields) => {
+  db.connection.query(query, values, (err, result, fields) => {
     if (err) {
       cb(err, null);
     } else {
       cb(null, result);
     }
   });
-}
+};
 
 const shareFileExistingUser = (file, userId, cb) => {
   const query = 'INSERT INTO collab SET ?';
@@ -153,14 +155,12 @@ const shareFileExistingUser = (file, userId, cb) => {
   });
 }
 
-const shareFilePendingUser = (file, email, cb) => {
-  const query = 'INSERT INTO pending_user_share SET ?';
-  const values = {
-    file_id: file.id,
-    email: email
-  };
+const searchPath = (userId, folderId, cb) => {
+  const query = '(SELECT SF.folder_id, F.name FROM (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id = ?)) AS SF LEFT JOIN files As F ON SF.folder_id = F.id)  UNION (SELECT id, name FROM files WHERE user_id = ? AND id = ? )';
 
-  db.connection.query(query, values, (err, result, fields) => {
+  const data = [userId, userId, userId, folderId, userId, userId, folderId, userId, folderId, userId, folderId];
+
+  db.connection.query(query, data, (err, result, fields) => {
     if (err) {
       cb(err, null);
     } else {
@@ -183,12 +183,13 @@ const verifyFilePermissions = (userId, cb) => {
 
 exports.fetchUser = fetchUser;
 exports.checkUserExists = checkUserExists;
+exports.fetchUser = fetchUser;
+exports.createUser = createUser;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
-exports.createUser = createUser;
 exports.deleteFiles = deleteFiles;
 exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;
-exports.searchPath = searchPath;
 exports.shareFileExistingUser = shareFileExistingUser;
-exports.shareFilePendingUser = shareFilePendingUser
+exports.shareFilePendingUser = shareFilePendingUser;
+exports.searchPath = searchPath;
