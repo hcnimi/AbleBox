@@ -19,14 +19,14 @@ class Share extends React.Component {
   }
 
   handleClick() {
-    // change file acl to public
+    const data = {
+        email: this.state.email,
+        file: this.props.file
+    };
     $.ajax({
       type: 'POST',
       url: '/share',
-      data: {
-        email: this.state.email,
-        file: this.props.file
-      },
+      data: JSON.stringify(data),
       contentType: 'application/json; charset=utf-8',
     })
     .done(() => {

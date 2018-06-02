@@ -15,6 +15,22 @@ const S3_API_VER = '2006-03-01';
 
 var app = express();
 
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use(express.static(__dirname + '/../client/dist'));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}));
+
 var s3 = new AWS.S3({
   accessKeyId: config.keys.accessKeyId,
   secretAccessKey: config.keys.secretAccessKey,
@@ -111,22 +127,6 @@ const createFolder = function(req, res, next) {
   });
 };
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
-app.use(express.static(__dirname + '/../client/dist'));
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 60000 }
-}));
-
 var checkUser = (req, res, next) => {
   if(req.session.user) {
     next();
@@ -136,7 +136,6 @@ var checkUser = (req, res, next) => {
 };
 
 const verifyFilePermissions = (req, res, next) => {
-
   db.verifyFilePermissions(req.params.id, (err, result) => {
     if (result && (result[0].user_id === req.session.user || result[0].is_public === 1)) {
       next();
@@ -144,7 +143,6 @@ const verifyFilePermissions = (req, res, next) => {
       res.redirect(500, '/');
     }
   });
-
 };
 
 app.get('/file/:id', verifyFilePermissions, (req, res) => {
@@ -303,20 +301,30 @@ app.post('/createFolder', createFolder, function(req, res) {
 });
 
 app.post('/share', (req, res) => {
+  console.log('req body', req.body);
   let cb = (err, result) => {
     if (err) {
+      console.log('err share', err);
       res.redirect(500, '/home');
     } else {
       res.status(201).end();
     }
-  });
+  };
   // if user exists
   //  update collab table
   // else
   //  update pending table
-  if (checkUserExists)
-    db.shareFileExistingUser(file, email, cb);
-    db.shareFilePendingUser(file, email, cb);
+  console.log('email', req.email);
+  db.checkUserExists(req.body.email, (err, result) => {
+    if (err) {
+      console.log('err checkUser', err);
+      res.status(500).end();
+    } else if (result.lenth) {
+      db.shareFileExistingUser(req.body.file, req.body.email, cb);
+    } else {
+      db.shareFilePendingUser(req.body.file, req.body.email, cb);
+    }
+  });
 });
 
 app.get('*', (req, res) => {
