@@ -135,6 +135,22 @@ var checkUser = (req, res, next) => {
   }
 };
 
+const verifyFilePermissions = (req, res, next) => {
+
+  db.verifyFilePermissions(req.params.id, (err, result) => {
+    if (result && (result[0].user_id === req.session.user || result[0].is_public === 1)) {
+      next();
+    } else {
+      res.redirect(500, '/');
+    }
+  });
+
+};
+
+app.get('/file/:id', verifyFilePermissions, (req, res) => {
+  getObject(req.params.id);
+});
+
 app.get('/home', checkUser, (req, res) => {
   // delete folderId from sesh if home route (root folder) is hit, as folder_id in db for root is NULL
   delete req.session.folderId;

@@ -124,7 +124,7 @@ const searchFiles = (keyword, cb) => {
 };
 
 const changeFilePermissions = (id, permission, cb) => {
-  let query = 'UPDATE files SET is_public = ? WHERE id = ?';
+  const query = 'UPDATE files SET is_public = ? WHERE id = ?';
 
   db.connection.query(query, [permission, id], (err, result, fields) => {
     if (err) {
@@ -133,6 +133,20 @@ const changeFilePermissions = (id, permission, cb) => {
       cb(null, result);
     }
   });
+};
+
+const verifyFilePermissions = (userId, cb) => {
+
+  const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
+
+  db.connection.query(query, [userId], function(err, result, fields) {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+
 };
 
 exports.fetchUser = fetchUser;
