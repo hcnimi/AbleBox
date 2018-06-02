@@ -108,8 +108,32 @@ const searchFiles = (userId, keyword, cb) => {
   });
 };
 
-const changeFilePermissions = (id, permission, cb) => {
-  const query = 'UPDATE files SET is_public = ? WHERE id = ?';
+const shareFileExistingUser = (file, cb) => {
+  const query = 'INSERT INTO collab SET ?';
+  const values = {
+    file_id: file.id,
+    folder_id: file.folder_id,
+    user_id: user.firstname,
+    last_name: user.lastname
+  };
+
+  db.connection.query(query, [permission, id], (err, result, fields) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
+const shareFilePendingUser = (file, cb) => {
+  const query = 'INSERT INTO collab SET ?';
+  const values = {
+    file_id: file.id,
+    folder_id: file.folder_id,
+    user_id: user.firstname,
+    last_name: user.lastname
+  };
 
   db.connection.query(query, [permission, id], (err, result, fields) => {
     if (err) {
