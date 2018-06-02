@@ -13,6 +13,13 @@ var multerS3 = require('multer-s3');
 const ABLEBOX_BUCKET = 'ablebox';
 const S3_API_VER = '2006-03-01';
 
+var s3 = new AWS.S3({
+  accessKeyId: config.keys.accessKeyId,
+  secretAccessKey: config.keys.secretAccessKey,
+  Bucket: ABLEBOX_BUCKET,
+  apiVersion: S3_API_VER
+});
+
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -30,13 +37,6 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 60000 }
 }));
-
-var s3 = new AWS.S3({
-  accessKeyId: config.keys.accessKeyId,
-  secretAccessKey: config.keys.secretAccessKey,
-  Bucket: ABLEBOX_BUCKET,
-  apiVersion: S3_API_VER
-});
 
 var deleteObject = function(objectKey) {
   var params = {
