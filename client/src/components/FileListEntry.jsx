@@ -60,7 +60,7 @@ class FileListEntry extends React.Component {
 		return (
 		  <Col xs="auto" className="file-list-entry py-3">
 		  	<Row className="justify-content-between">
-		  		<Col sm="auto">
+		  		<Col xs="3" sm="5" md="5" lg="8">
 		  			{this.props.file.is_folder
 			  			? <img width="30px" src={folderIcon} alt="folder icon"/>
 			  			: <img width="30px" src={fileIcon} alt="file icon"/>
@@ -70,10 +70,13 @@ class FileListEntry extends React.Component {
               : <span> {this.props.file.name}</span>
             }
 	   			</Col>
-		  		<Col sm="auto">
+		  		<Col xs="2" sm="3" md="3" lg="2">
 	   				<span style={{fontSize: '0.9em', color: 'gray'}}>{moment(this.props.file.lastModified).format('MM/DD/YY h:mm a')}</span>
 	   			</Col>
-	   			<Col sm="auto">
+	   			<Col xs="1" sm="1" md="1" lg="1">
+          	<div id="deleteBtn" className="btn btn-success clearfix" onClick={(e)=>{this.props.handleClickDelete(this.props.file.id, this.props.file.is_folder)}}>Delete</div>
+        	</Col>
+	   			<Col xs="1" sm="1" md="1" lg="1">
 	   				<span><Share file={this.props.file} share={this.share}/></span>
 	   			</Col>
 	   		</Row>

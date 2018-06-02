@@ -31,6 +31,7 @@ class AllFiles extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleFiles = this.handleFiles.bind(this);
     this.searchHandler = _.debounce(this.searchHandler.bind(this), 500);
+    this.handleClickDelete = this.handleClickDelete.bind(this);
     this.openFolder = this.openFolder.bind(this);
     this.toggle = this.toggle.bind(this);
   }
@@ -135,6 +136,29 @@ class AllFiles extends React.Component {
     }
   }
 
+  handleClickDelete(fileId, is_folder) {
+    let targetFile = {
+      id: fileId,
+      is_folder: is_folder
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: '/delete',
+      data: JSON.stringify(targetFile),
+      contentType: 'application/json; charset=utf-8',
+      success: (data, textStatus, jqXHR) => {
+        this.setState({
+          files: JSON.parse(data)
+        })
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        alert('handleClickDelete error: ' + errorThrown);
+      },
+    });
+  }
+
+
   toggle() {
     this.setState({
       modal: !this.state.modal,
@@ -171,7 +195,7 @@ class AllFiles extends React.Component {
         <Path path = {this.state.path} openFolder = {this.openFolder}/>
         <Dropzone files={this.state.files} handleFiles={this.handleFiles} searchMode={this.state.searchMode}>
           {this.state.files.length
-            ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} openFolder={this.openFolder} />)
+            ? this.state.files.map((file, i) => <FileListEntry key={i} file={file} openFolder={this.openFolder} handleClickDelete={this.handleClickDelete}/>)
             : null
           }
         </Dropzone>

@@ -83,6 +83,19 @@ const createFolder = (req, cb) => {
   });
 };
 
+const deleteFiles = (userId, fileId, is_folder, cb) => {
+  let query = 'DELETE FROM files WHERE user_id = ? AND id = ?';
+    // need to refactor later to add recursive deletion.
+  db.connection.query(query, [userId, fileId], (err, result, fields) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
+
 const getFiles = (userId, folderId, cb) => {
   const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND folder_id = ? ORDER BY is_folder DESC, name';
   db.connection.query(query, [userId, folderId], (err, result, fields) => {
@@ -142,6 +155,7 @@ exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
 exports.createUser = createUser;
+exports.deleteFiles = deleteFiles;
 exports.fetchUser = fetchUser;
 exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;

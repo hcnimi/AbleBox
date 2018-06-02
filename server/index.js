@@ -124,7 +124,7 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 60000 }
+  cookie: { maxAge: 600000 }
 }));
 
 var checkUser = (req, res, next) => {
@@ -274,6 +274,32 @@ app.post('/searchfiles', checkUser, function(req, res) {
       res.status = 200;
       res.write(JSON.stringify(result));
       res.end();
+    }
+  });
+});
+
+app.post('/delete', checkUser, function(req, res) {
+  let fileId = req.body.id;
+  let user_id = req.session.user;
+  let folderId = req.session.folderId;
+  let is_folder = req.body.is_folder;
+  db.deleteFiles(user_id, fileId, is_folder, function(err, result) {
+    if (err) {
+      res.status = 404;
+      res.write(err);
+      res.end();
+    } else {
+      db.getFiles(user_id, folderId, function(err2, result2) {
+        if (err) {
+          res.status = 404;
+          res.write(err);
+          res.end();
+        } else {
+          res.status = 200;
+          res.write(JSON.stringify(result2));
+          res.end();
+        }
+      });
     }
   });
 });
