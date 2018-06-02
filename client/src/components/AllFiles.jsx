@@ -103,11 +103,9 @@ class AllFiles extends React.Component {
   }
 
   openFolder(folderId) {
-    let data = {folderId: folderId};
-    $.ajax ({
-      type: 'POST',
-      url: '/openFolder',
-      data: JSON.stringify(data),
+    $.ajax({
+      type: 'GET',
+      url: '/folder/' + folderId,
       contentType: 'application/json; charset=utf-8',
       success: (data, textStatus, jqXHR) => {
         this.setState({
@@ -115,7 +113,7 @@ class AllFiles extends React.Component {
         })
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
-        alert('search handler error: ' + errorThrown);
+        alert('openFolder error: ' + errorThrown);
       },
     });
   }

@@ -46,7 +46,7 @@ const fetchUser = (email, cb) => {
 const createFile = (req, cb) => {
   const fileDetails = {
     name: req.file.originalname,
-    folder_id: req.session.folderId,
+    folder_id: req.session.folderId ? req.session.folderId : 0,
     file_ext: req.file.contentType,
     user_id: req.session.user,
     s3_objectId: req.file.key
@@ -66,7 +66,7 @@ const createFile = (req, cb) => {
 const createFolder = (req, cb) => {
   const folderDetails = {
     name: req.body.folderName,
-    folder_id: req.session.folderId,
+    folder_id: req.session.folderId ? req.session.folderId : 0,
     user_id: req.session.user,
     s3_objectId: `${req.session.user}/${req.body.folderName}/`,
     is_folder: 1
@@ -83,10 +83,9 @@ const createFolder = (req, cb) => {
   });
 };
 
-const getFiles = (userId, cb) => {
-  const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? ORDER BY is_folder DESC, name';
-
-  db.connection.query(query, userId, (err, result, fields) => {
+const getFiles = (userId, folderId, cb) => {
+  const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND folder_id = ? ORDER BY is_folder DESC, name';
+  db.connection.query(query, [userId, folderId], (err, result, fields) => {
     if (err) {
       cb(err, null);
     } else {
@@ -95,26 +94,12 @@ const getFiles = (userId, cb) => {
   });
 };
 
-const openFolder = (folderId, cb) => {
-
-  let query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE folder_id = ? ORDER BY is_folder DESC, name';
-
-  db.connection.query(query, folderId, (err, result, fields) => {
-    if (err) {
-      cb(err, null);
-    } else {
-      cb(null, result);
-    }
-  });
-};
-
-
-const searchFiles = (keyword, cb) => {
+const searchFiles = (userId, keyword, cb) => {
   keyword = '%' + keyword + '%';
 
-  let query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE name LIKE ? ORDER BY is_folder DESC, name';
+  let query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND name LIKE ? ORDER BY is_folder DESC, name';
 
-  db.connection.query(query, keyword, (err, result, fields) => {
+  db.connection.query(query, [userId, keyword], (err, result, fields) => {
     if (err) {
       cb(err, null);
     } else {
@@ -141,7 +126,6 @@ exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
 exports.getFiles = getFiles;
-exports.openFolder = openFolder;
 exports.searchFiles = searchFiles;
 exports.createFolder = createFolder;
 exports.changeFilePermissions = changeFilePermissions;

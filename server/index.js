@@ -137,7 +137,7 @@ var checkUser = (req, res, next) => {
 
 app.get('/home', checkUser, (req, res) => {
   // delete folderId from sesh if home route (root folder) is hit, as folder_id in db for root is NULL
-  delete req.session.folderId;
+  req.session.folderId = 0;
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 
@@ -155,6 +155,7 @@ app.post('/login', (req, res) => {
           res.status(401).end();
         } else {
           req.session.regenerate(() => {
+            req.session.folderId = 0;
             req.session.user = result[0].id;
             res.status(200).end();
           });
@@ -222,7 +223,8 @@ app.post('/upload', upload.single('file'), function(req, res, next) {
 });
 
 app.get('/getfiles', checkUser, function(req, res) {
-  db.getFiles(req.session.user.toString(), function(err, result) {
+  let folderId = req.session.folderId;
+  db.getFiles(req.session.user, folderId, function(err, result) {
     if (err) {
       res.status = 404;
       res.write(err);
@@ -235,10 +237,11 @@ app.get('/getfiles', checkUser, function(req, res) {
   });
 });
 
-app.post('/openfolder', checkUser, function(req, res) {
-  let folderId = req.body.folderId;
+app.get('/folder/:folderid', checkUser, function(req, res) {
+  let folderId = req.params.folderid;
+  let user_id = req.session.user;
   if(folderId) {
-    db.openFolder(folderId, function(err, result) {
+    db.getFiles(user_id, folderId, function(err, result) {
       if (err) {
         res.status = 404;
         res.write(err);
@@ -255,7 +258,8 @@ app.post('/openfolder', checkUser, function(req, res) {
 
 app.post('/searchfiles', checkUser, function(req, res) {
   let keyword = req.body.keyword;
-  db.searchFiles(keyword, function(err, result) {
+  let user_id = req.session.user;
+  db.searchFiles(user_id, keyword, function(err, result) {
     if (err) {
       res.status = 404;
       res.write(err);
