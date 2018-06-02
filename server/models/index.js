@@ -96,7 +96,7 @@ const deleteFiles = (userId, fileId, is_folder, cb) => {
 };
 
 const getFiles = (userId, folderId, cb) => {
-  const query = 'SELECT id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND folder_id = ? ORDER BY is_folder DESC, name';
+  const query = 'SELECT id, folder_id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND folder_id = ? ORDER BY is_folder DESC, name';
   db.connection.query(query, [userId, folderId], (err, result, fields) => {
     if (err) {
       cb(err, null);
@@ -153,16 +153,14 @@ const shareFileExistingUser = (file, cb) => {
   });
 }
 
-const shareFilePendingUser = (file, cb) => {
+const shareFilePendingUser = (file, email, cb) => {
   const query = 'INSERT INTO collab SET ?';
   const values = {
     file_id: file.id,
-    folder_id: file.folder_id,
-    user_id: user.firstname,
-    last_name: user.lastname
+    email: email
   };
 
-  db.connection.query(query, [userId], function(err, result, fields) {
+  db.connection.query(query, values, (err, result, fields) => {
     if (err) {
       cb(err, null);
     } else {
@@ -173,7 +171,6 @@ const shareFilePendingUser = (file, cb) => {
 };
 
 const verifyFilePermissions = (userId, cb) => {
-
   const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
 
   db.connection.query(query, [userId], function(err, result, fields) {
@@ -183,17 +180,17 @@ const verifyFilePermissions = (userId, cb) => {
       cb(null, result);
     }
   });
-
 };
 
 exports.fetchUser = fetchUser;
-exports.createUser = createUser;
 exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
 exports.createFolder = createFolder;
 exports.createUser = createUser;
 exports.deleteFiles = deleteFiles;
-exports.fetchUser = fetchUser;
 exports.getFiles = getFiles;
 exports.searchFiles = searchFiles;
 exports.searchPath = searchPath;
+exports.shareFileExistingUser = shareFileExistingUser;
+exports.shareFilePendingUser = shareFilePendingUser;
+exports.verifyFilePermissions = verifyFilePermissions;

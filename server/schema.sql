@@ -38,7 +38,7 @@ DROP TABLE IF EXISTS `collab`;
 
 CREATE TABLE collab (
   id MEDIUMINT(8) UNSIGNED AUTO_INCREMENT,
-  file_id MEDIUMINT(8) NOT NULL,
+  file_id MEDIUMINT(8) UNSIGNED NOT NULL,
   folder_id MEDIUMINT(8) NOT NULL,
   user_id MEDIUMINT(8) NOT NULL,
   PRIMARY KEY (id),
@@ -47,7 +47,6 @@ CREATE TABLE collab (
   INDEX (file_id),
   INDEX (folder_id),
   INDEX (user_id)
-  INDEX (folder_id)
 );
 
 DROP TABLE IF EXISTS `pending_user_share`;
@@ -55,7 +54,7 @@ DROP TABLE IF EXISTS `pending_user_share`;
 CREATE TABLE pending_user_share (
   id MEDIUMINT(8) UNSIGNED AUTO_INCREMENT,
   email VARCHAR(200) NOT NULL,
-  file_id MEDIUMINT(8) NOT NULL,
+  file_id MEDIUMINT(8) UNSIGNED NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (file_id) REFERENCES files(id),
   INDEX (email)
