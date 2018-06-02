@@ -30,11 +30,7 @@ class Share extends React.Component {
       contentType: 'application/json; charset=utf-8',
     })
     .done(() => {
-      FB.ui({
-        method: 'share',
-        display: 'popup',
-        href: 'https://s3-us-west-1.amazonaws.com/ablebox/' + this.props.file.s3_objectId
-      }, function(response){});
+      this.toggle();
     })
     .fail(() => {
       alert('failed to share');

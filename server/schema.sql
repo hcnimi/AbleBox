@@ -39,12 +39,12 @@ DROP TABLE IF EXISTS `collab`;
 CREATE TABLE collab (
   id MEDIUMINT(8) UNSIGNED AUTO_INCREMENT,
   file_id MEDIUMINT(8) UNSIGNED NOT NULL,
-  folder_id MEDIUMINT(8) NOT NULL,
-  user_id MEDIUMINT(8) NOT NULL,
+  folder_id MEDIUMINT(8) UNSIGNED NOT NULL,
+  user_id MEDIUMINT(8) UNSIGNED NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (file_id) REFERENCES files(id),
   FOREIGN KEY (user_id) REFERENCES users(id),
-  INDEX (user_id)
+  INDEX (user_id),
   INDEX (folder_id)
 );
 
