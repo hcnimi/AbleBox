@@ -168,7 +168,6 @@ app.post('/login', (req, res) => {
     } else {
       bcrypt.compare(password, result[0].password, (err, match) => {
         if (!match) {
-          console.log('match', match);
           res.redirect(401, '/signin');
         } else {
           req.session.regenerate(() => {
