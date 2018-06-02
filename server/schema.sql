@@ -39,22 +39,15 @@ DROP TABLE IF EXISTS `collab`;
 CREATE TABLE collab (
   id MEDIUMINT(8) UNSIGNED AUTO_INCREMENT,
   file_id MEDIUMINT(8) NOT NULL,
-<<<<<<< HEAD
   folder_id MEDIUMINT(8) NOT NULL,
-=======
-  folder_id MEDIUMINT(8) DEFAULT NULL,
->>>>>>> Implement schema for collab and pending user reg tables.
   user_id MEDIUMINT(8) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (file_id) REFERENCES files(id),
   FOREIGN KEY (user_id) REFERENCES users(id),
-<<<<<<< HEAD
-  INDEX (folder_id)
-=======
   INDEX (file_id),
   INDEX (folder_id),
   INDEX (user_id)
->>>>>>> Implement schema for collab and pending user reg tables.
+  INDEX (folder_id)
 );
 
 DROP TABLE IF EXISTS `pending_user_share`;
