@@ -97,6 +97,7 @@ const deleteFiles = (userId, fileId, is_folder, cb) => {
 
 const getFiles = (userId, folderId, cb) => {
   const query = 'SELECT id, folder_id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND folder_id = ? ORDER BY is_folder DESC, name';
+
   db.connection.query(query, [userId, folderId], (err, result, fields) => {
     if (err) {
       cb(err, null);
@@ -168,20 +169,6 @@ const shareFilePendingUser = (file, email, cb) => {
   });
 };
 
-const searchPath = (userId, folderId, cb) => {
-  const query = '(SELECT SF.folder_id, F.name FROM (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id IN (SELECT folder_id FROM files WHERE user_id = ?  AND id = ? )) UNION (SELECT folder_id FROM files WHERE user_id = ? AND id = ?)) AS SF LEFT JOIN files As F ON SF.folder_id = F.id)  UNION (SELECT id, name FROM files WHERE user_id = ? AND id = ? )';
-
-  const data = [userId, userId, userId, folderId, userId, userId, folderId, userId, folderId, userId, folderId];
-
-  db.connection.query(query, [userId], function(err, result, fields) {
-    if (err) {
-      cb(err, null);
-    } else {
-      cb(null, result);
-    }
-  });
-};
-
 const verifyFilePermissions = (userId, cb) => {
   const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
 
@@ -199,6 +186,7 @@ const verifyFilePermissions = (userId, cb) => {
 // const verifyFilePermissions = (userId, cb) => {
 //   const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
 // }
+
 exports.fetchUser = fetchUser;
 exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
@@ -210,4 +198,3 @@ exports.searchFiles = searchFiles;
 exports.searchPath = searchPath;
 exports.shareFileExistingUser = shareFileExistingUser;
 exports.shareFilePendingUser = shareFilePendingUser;
-exports.verifyFilePermissions = verifyFilePermissions;

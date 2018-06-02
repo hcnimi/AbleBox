@@ -70,7 +70,7 @@ class AllFiles extends React.Component {
 
   searchHandler(value) {
     let data = {'keyword': value};
-    $.ajax({
+    $.ajax ({
       type: 'POST',
       url: '/searchfiles',
       data: JSON.stringify(data),
@@ -79,11 +79,11 @@ class AllFiles extends React.Component {
         this.setState({
           files: JSON.parse(data),
           searchMode: true
-        });
+        })
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         alert('search handler error: ' + errorThrown);
-      }
+      },
     });
   }
 
