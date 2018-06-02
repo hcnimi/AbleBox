@@ -109,7 +109,6 @@ const searchFiles = (userId, keyword, cb) => {
 };
 
 const shareFileExistingUser = (file, userId, cb) => {
-  console.log('file', file);
   const query = 'INSERT INTO collab SET ?';
   const values = {
     file_id: file.id,
