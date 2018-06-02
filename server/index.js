@@ -348,7 +348,6 @@ app.post('/createFolder', createFolder, function(req, res) {
 });
 
 app.post('/share', (req, res) => {
-  console.log('req body', req.body);
   let cb = (err, result) => {
     if (err) {
       console.log('err share', err);
@@ -361,10 +360,8 @@ app.post('/share', (req, res) => {
   //  update collab table
   // else
   //  update pending table
-  console.log('email', req.email);
   db.checkUserExists(req.body.email, (err, result) => {
     if (err) {
-      console.log('err checkUser', err);
       res.status(500).end();
     } else if (result.lenth) {
       db.shareFileExistingUser(req.body.file, req.body.email, cb);

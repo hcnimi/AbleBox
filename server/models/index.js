@@ -154,7 +154,7 @@ const shareFileExistingUser = (file, cb) => {
 }
 
 const shareFilePendingUser = (file, email, cb) => {
-  const query = 'INSERT INTO collab SET ?';
+  const query = 'INSERT INTO pending_user_share SET ?';
   const values = {
     file_id: file.id,
     email: email
@@ -167,7 +167,6 @@ const shareFilePendingUser = (file, email, cb) => {
       cb(null, result);
     }
   });
-
 };
 
 const verifyFilePermissions = (userId, cb) => {
