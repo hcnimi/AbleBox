@@ -171,5 +171,4 @@ exports.searchFiles = searchFiles;
 exports.createFolder = createFolder;
 exports.shareFileExistingUser = shareFileExistingUser;
 exports.shareFilePendingUser = shareFilePendingUser;
-// exports.verifyFilePermissions = verifyFilePermissions;
 exports.searchPath = searchPath;
