@@ -20,8 +20,8 @@ class Share extends React.Component {
 
   handleClick() {
     const data = {
-        email: this.state.email,
-        file: this.props.file
+      email: this.state.email,
+      file: this.props.file
     };
     $.ajax({
       type: 'POST',

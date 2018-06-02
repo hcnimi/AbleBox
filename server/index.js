@@ -173,6 +173,7 @@ app.get('/home', checkUser, (req, res) => {
 app.post('/login', (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
+
   db.fetchUser(email, (err, result) => {
     if (err) {
       res.redirect(500, '/login');
@@ -196,6 +197,7 @@ app.post('/login', (req, res) => {
 
 app.post('/signup', (req, res) => {
   let userData = req.body;
+
   bcrypt.hash(userData.password, null, null, (err, hash) => {
     if (err) {
       res.redirect(500, '/signup');
@@ -270,6 +272,7 @@ app.get('/getfiles', checkUser, function(req, res) {
 app.get('/folder/:folderid', checkUser, function(req, res) {
   let folderId = req.params.folderid;
   let user_id = req.session.user;
+
   if(folderId) {
     db.getFiles(user_id, folderId, function(err, result) {
       if (err) {
@@ -294,6 +297,7 @@ app.get('/folder/:folderid', checkUser, function(req, res) {
 app.post('/searchfiles', checkUser, function(req, res) {
   let keyword = req.body.keyword;
   let user_id = req.session.user;
+
   db.searchFiles(user_id, keyword, function(err, result) {
     if (err) {
       res.status = 404;
@@ -350,24 +354,18 @@ app.post('/createFolder', createFolder, function(req, res) {
 app.post('/share', (req, res) => {
   let cb = (err, result) => {
     if (err) {
-      console.log('err share', err);
       res.redirect(500, '/home');
     } else {
       res.status(201).end();
     }
   };
-  // if user exists
-  //  update collab table
-  // else
-  //  update pending table
+
   db.checkUserExists(req.body.email, (err, result) => {
     if (err) {
       res.status(500).end();
     } else if (result.length) {
-      console.log('result0', result);
       db.shareFileExistingUser(req.body.file, req.session.user, cb);
     } else {
-      console.log('result 322', result);
       db.shareFilePendingUser(req.body.file, req.body.email, cb);
     }
   });
