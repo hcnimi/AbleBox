@@ -142,7 +142,20 @@ const shareFilePendingUser = (file, email, cb) => {
   });
 };
 
+const changeFilePermissions = (id, permission, cb) => {
+  const query = 'UPDATE files SET is_public = ? WHERE id = ?';
+
+  db.connection.query(query, [userId], function(err, result, fields) {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
 const verifyFilePermissions = (userId, cb) => {
+
   const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
 
   db.connection.query(query, [userId], function(err, result, fields) {
@@ -152,6 +165,7 @@ const verifyFilePermissions = (userId, cb) => {
       cb(null, result);
     }
   });
+
 };
 
 exports.fetchUser = fetchUser;
