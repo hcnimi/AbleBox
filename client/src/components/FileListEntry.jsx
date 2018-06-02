@@ -47,7 +47,7 @@ class FileListEntry extends React.Component {
 		    	// handle error
 		    }
 		  };
-		  console.log('formData', formData);
+
 		  req.send(formData);
 		}
 	}
@@ -65,10 +65,7 @@ class FileListEntry extends React.Component {
 			  			? <img width="30px" src={folderIcon} alt="folder icon"/>
 			  			: <img width="30px" src={fileIcon} alt="file icon"/>
 		  			}
-	   				{this.props.file.is_folder
-              ? <span className="onclick" onClick={()=>{this.props.openFolder(this.props.file.id)}}> {this.props.file.name}</span>
-              : <span> {this.props.file.name}</span>
-            }
+	   				<span> {this.props.file.name}</span>
 	   			</Col>
 		  		<Col sm="auto">
 	   				<span style={{fontSize: '0.9em', color: 'gray'}}>{moment(this.props.file.lastModified).format('MM/DD/YY h:mm a')}</span>

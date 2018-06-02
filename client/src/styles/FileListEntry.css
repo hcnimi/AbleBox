@@ -5,9 +5,3 @@
 .file-list-entry:last-child {
   border-bottom: 1px solid lightgray;
 }
-
-.onclick:hover {
-  cursor: pointer;
-  text-decoration: underline;
-  color: #808080;
-}

@@ -15,6 +15,13 @@ const S3_API_VER = '2006-03-01';
 
 var app = express();
 
+var s3 = new AWS.S3({
+  accessKeyId: config.keys.accessKeyId,
+  secretAccessKey: config.keys.secretAccessKey,
+  Bucket: ABLEBOX_BUCKET,
+  apiVersion: S3_API_VER
+});
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(function(req, res, next) {
@@ -31,12 +38,6 @@ app.use(session({
   cookie: { maxAge: 60000 }
 }));
 
-var s3 = new AWS.S3({
-  accessKeyId: config.keys.accessKeyId,
-  secretAccessKey: config.keys.secretAccessKey,
-  Bucket: ABLEBOX_BUCKET,
-  apiVersion: S3_API_VER
-});
 
 var deleteObject = function(objectKey) {
   var params = {
@@ -133,20 +134,6 @@ var checkUser = (req, res, next) => {
     res.redirect('/login');
   }
 };
-
-const verifyFilePermissions = (req, res, next) => {
-  db.verifyFilePermissions(req.params.id, (err, result) => {
-    if (result && (result[0].user_id === req.session.user || result[0].is_public === 1)) {
-      next();
-    } else {
-      res.redirect(500, '/');
-    }
-  });
-};
-
-app.get('/file/:id', verifyFilePermissions, (req, res) => {
-  getObject(req.params.id);
-});
 
 app.get('/home', checkUser, (req, res) => {
   // delete folderId from sesh if home route (root folder) is hit, as folder_id in db for root is NULL
@@ -293,7 +280,7 @@ app.post('/createFolder', createFolder, function(req, res) {
       res.end();
     } else {
       res.status = 200;
-      res.write(JSON.stringify({folder_id: result.insertId}));
+      res.write('Successfully created folder!');
       res.end();
     }
   });
@@ -302,24 +289,18 @@ app.post('/createFolder', createFolder, function(req, res) {
 app.post('/share', (req, res) => {
   let cb = (err, result) => {
     if (err) {
-      console.log('err share', err);
       res.redirect(500, '/home');
     } else {
       res.status(201).end();
     }
   };
-  // if user exists
-  //  update collab table
-  // else
-  //  update pending table
+
   db.checkUserExists(req.body.email, (err, result) => {
     if (err) {
       res.status(500).end();
     } else if (result.length) {
-      console.log('result0', result);
       db.shareFileExistingUser(req.body.file, req.session.user, cb);
     } else {
-      console.log('result 322', result);
       db.shareFilePendingUser(req.body.file, req.body.email, cb);
     }
   });

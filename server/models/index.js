@@ -85,6 +85,7 @@ const createFolder = (req, cb) => {
 
 const getFiles = (userId, folderId, cb) => {
   const query = 'SELECT id, folder_id, name, s3_objectId, is_public, created_on as lastModified, is_folder FROM files WHERE user_id = ? AND folder_id = ? ORDER BY is_folder DESC, name';
+
   db.connection.query(query, [userId, folderId], (err, result, fields) => {
     if (err) {
       cb(err, null);
@@ -109,7 +110,6 @@ const searchFiles = (userId, keyword, cb) => {
 };
 
 const shareFileExistingUser = (file, userId, cb) => {
-  console.log('file', file);
   const query = 'INSERT INTO collab SET ?';
   const values = {
     file_id: file.id,
@@ -142,18 +142,6 @@ const shareFilePendingUser = (file, email, cb) => {
   });
 };
 
-const verifyFilePermissions = (userId, cb) => {
-  const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
-
-  db.connection.query(query, [userId], function(err, result, fields) {
-    if (err) {
-      cb(err, null);
-    } else {
-      cb(null, result);
-    }
-  });
-};
-
 exports.fetchUser = fetchUser;
 exports.createUser = createUser;
 exports.checkUserExists = checkUserExists;
@@ -164,4 +152,3 @@ exports.searchFiles = searchFiles;
 exports.createFolder = createFolder;
 exports.shareFileExistingUser = shareFileExistingUser;
 exports.shareFilePendingUser = shareFilePendingUser;
-exports.verifyFilePermissions = verifyFilePermissions;
