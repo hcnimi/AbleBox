@@ -181,12 +181,6 @@ const verifyFilePermissions = (userId, cb) => {
   });
 };
 
-
-//TODO
-// const verifyFilePermissions = (userId, cb) => {
-//   const query = 'SELECT created_by_user_id AS user_id, is_public FROM files WHERE id = ?';
-// }
-
 exports.fetchUser = fetchUser;
 exports.checkUserExists = checkUserExists;
 exports.createFile = createFile;
@@ -198,3 +192,4 @@ exports.searchFiles = searchFiles;
 exports.searchPath = searchPath;
 exports.shareFileExistingUser = shareFileExistingUser;
 exports.shareFilePendingUser = shareFilePendingUser;
+exports.createFolder = createFolder;
